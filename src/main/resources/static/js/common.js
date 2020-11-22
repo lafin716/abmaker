@@ -6,4 +6,4 @@ function init(){
 	alert('test done');
 }
 
-document.addEventListener("DOMContentLoaded", init);
+//document.addEventListener("DOMContentLoaded", init);

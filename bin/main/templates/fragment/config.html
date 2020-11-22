@@ -3,6 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
     <!--configFragment 선언-->
     <th:block th:fragment="configFragment">
+        <title th:text="${APPNAME}"></title>
           
         <!-- 이 영역에 공통으로 사용할 css, js library를 선언한다. -->
         <link rel="stylesheet" th:href="@{/css/reset.css}" >

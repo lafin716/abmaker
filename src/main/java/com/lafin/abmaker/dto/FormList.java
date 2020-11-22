@@ -1,15 +1,17 @@
 package com.lafin.abmaker.dto;
 
+import java.util.Date;
+
 public class FormList {
-	private int formSeq;
+	private Integer formSeq;
 	private String formTitle;
-	private boolean isMain;
-	private String registDate;
+	private Integer isMain;
+	private Date registDate;
 	
-	public int getFormSeq() {
+	public Integer getFormSeq() {
 		return formSeq;
 	}
-	public void setFormSeq(int formSeq) {
+	public void setFormSeq(Integer formSeq) {
 		this.formSeq = formSeq;
 	}
 	public String getFormTitle() {
@@ -18,16 +20,16 @@ public class FormList {
 	public void setFormTitle(String formTitle) {
 		this.formTitle = formTitle;
 	}
-	public boolean isMain() {
+	public Integer getIsMain() {
 		return isMain;
 	}
-	public void setMain(boolean isMain) {
+	public void setIsMain(Integer isMain) {
 		this.isMain = isMain;
 	}
-	public String getRegistDate() {
+	public Date getRegistDate() {
 		return registDate;
 	}
-	public void setRegistDate(String registDate) {
+	public void setRegistDate(Date registDate) {
 		this.registDate = registDate;
 	}
 	
