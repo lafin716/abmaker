@@ -7,7 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.lafin.abmaker.dto.FormList;
+import com.lafin.abmaker.dto.FormDto;
+import com.lafin.abmaker.dto.PageDto;
 import com.lafin.abmaker.mapper.FormListMapper;
 
 @Service("mainService")
@@ -20,12 +21,12 @@ public class MainServiceImpl implements MainService{
 	private FormListMapper formListMapper;
 
 	@Override
-	public List<FormList> getFormList() {
+	public List<FormDto> getFormList() {
 		
-		List<FormList> list = formListMapper.getFormList();
+		List<FormDto> list = formListMapper.getFormList();
 		
 		for(int i=0; i<list.size(); i++) {
-			FormList tmpForm = (FormList) list.get(i);
+			FormDto tmpForm = (FormDto) list.get(i);
 			
 			System.out.println(tmpForm.toString());
 			
@@ -37,6 +38,14 @@ public class MainServiceImpl implements MainService{
 
 		return list;
 	}
+
+	@Override
+	public List<PageDto> getPageList(Integer formSeq) {
+		// TODO Auto-generated method stub
+		return formListMapper.getPageList(formSeq);
+	}
+	
+	
 	
 	
 }

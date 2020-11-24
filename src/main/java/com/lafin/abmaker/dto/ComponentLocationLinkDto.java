@@ -1,6 +1,6 @@
 package com.lafin.abmaker.dto;
 
-public class ComponentLocationLink {
+public class ComponentLocationLinkDto {
 	private int compSetSeq;
 	private int compSeq;
 	private int pageSeq;

@@ -5,6 +5,19 @@
       layout:decorate="~{layout/default}">
 
     <div layout:fragment="content">
-        <h1 th:text="${test}"></h1>
+        <h1 th:text="${pageTitle}"></h1>
+        
+        <table class="table_basic">
+        	<tr>
+        		<th>번호</th>
+        		<th>양식명</th>
+        		<th>생성날짜</th>
+        	</tr>
+	        <tr th:each="form : ${formList}" th:onclick="|javascript:movePage('${form.formSeq}');|">
+		         <td th:text="${form.formSeq}">번호</td>    
+		         <td th:text="${form.formTitle}">name</td>
+		         <td th:text="${form.registDate}">stat</td>
+		     </tr>
+	     </table>
     </div>
 </html>

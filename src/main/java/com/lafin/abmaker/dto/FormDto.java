@@ -2,8 +2,9 @@ package com.lafin.abmaker.dto;
 
 import java.util.Date;
 
-public class FormList {
+public class FormDto {
 	private Integer formSeq;
+	private Integer userSeq;
 	private String formTitle;
 	private Integer isMain;
 	private Date registDate;
@@ -13,6 +14,13 @@ public class FormList {
 	}
 	public void setFormSeq(Integer formSeq) {
 		this.formSeq = formSeq;
+	}
+	
+	public Integer getUserSeq() {
+		return userSeq;
+	}
+	public void setUserSeq(Integer userSeq) {
+		this.userSeq = userSeq;
 	}
 	public String getFormTitle() {
 		return formTitle;

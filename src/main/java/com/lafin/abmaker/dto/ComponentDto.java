@@ -1,6 +1,6 @@
 package com.lafin.abmaker.dto;
 
-public class ComponentList {
+public class ComponentDto {
 	private int compSeq;
 	private int accountSeq;
 	private String compName;

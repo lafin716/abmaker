@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/default}">
+
+    <div layout:fragment="content">
+        <h1 th:text="${pageTitle}"></h1>
+
+		<form name="joinFrm" method="post" action="">
+			<input type="user_name">
+			<input type="user_id">
+			<input type="user_pw">
+			<input type="user_pw_confirm">
+			<input type="user_email">
+			
+			<button type="button">회원가입</button>
+			<button type="button">취소</button>
+		</form>
+    </div>
+</html>

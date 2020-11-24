@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.lafin.abmaker.dto.FormDto;
 import com.lafin.abmaker.service.MainService;
 
 @Controller
@@ -28,13 +29,23 @@ public class HomeController extends BaseController {
 	public String home(Model model) {
 		super.init(model);
 		
-		System.out.println("Main Start");
+		List formList = mainService.getFormList();
 		
-		List list = mainService.getFormList();
-		
-		model.addAttribute("list", list);
-		model.addAttribute("test", "pjw");
+		model.addAttribute("formList", formList);
+		model.addAttribute("pageTitle", "양식목록");
 		
 		return "index";
+	}
+	
+	@RequestMapping(value="/main")
+	public String main(Model model, FormDto formList) {
+		super.init(model);
+		
+		System.out.println("formList > " + formList.getFormTitle());
+		
+		List pageList = mainService.getPageList(formList.getFormSeq());
+		
+		
+		return "main";
 	}
 }

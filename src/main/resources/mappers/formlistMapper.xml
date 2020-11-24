@@ -5,10 +5,17 @@
     
 <mapper namespace="com.lafin.abmaker.mapper.FormListMapper">
         
-    <select id="getFormList" resultType="com.lafin.abmaker.dto.FormList">
+    <select id="getFormList" resultType="com.lafin.abmaker.dto.FormDto">
         SELECT * 
         FROM form_list
         ORDER BY is_main DESC
+    </select>
+    
+    <select id="getPageList" parameterType="Integer" resultType="com.lafin.abmaker.dto.PageDto">
+        SELECT * 
+        FROM page_list
+        WHERE 1=1 
+        AND form_seq = #{formSeq}
     </select>
     
 </mapper>
