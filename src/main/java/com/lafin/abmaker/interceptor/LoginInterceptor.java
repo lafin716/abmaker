@@ -27,7 +27,8 @@ public class LoginInterceptor implements HandlerInterceptor{
 		UserDto userInfo = (UserDto) session.getAttribute("userInfo");
 		
 		if(ObjectUtils.isEmpty(userInfo)) {
-			response.sendRedirect("/login/form");
+			logger.info("gotcha");
+			response.sendRedirect("/member/login");
 			result = false;
 		}else {
 			logger.info("interceptor true!!!!!!!!!!!!!!!");

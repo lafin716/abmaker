@@ -2,6 +2,7 @@ package com.lafin.abmaker.controller;
 
 import java.io.IOException;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
@@ -11,7 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping(value = "/form/*")
 public class FormController extends BaseController{
-	
+
+	public FormController(HttpServletRequest request, HttpServletResponse response) {
+		super(request, response);
+	}
 	
 	@RequestMapping
 	public void index(HttpServletResponse response) throws IOException {

@@ -4,18 +4,20 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/default}">
 
-    <div layout:fragment="content">
-        <h1 th:text="${pageTitle}"></h1>
-
-		<form name="joinFrm" method="post" action="">
-			<input type="user_name">
-			<input type="user_id">
-			<input type="user_pw">
-			<input type="user_pw_confirm">
-			<input type="user_email">
+    <div class="ly-gradient grd02" layout:fragment="content">
+	<form id="joinFrm" name="joinFrm" method="post" action="join">
+	   	<div class="login-frm">
+	        <h1>회원가입</h1>	
 			
-			<button type="button">회원가입</button>
-			<button type="button">취소</button>
-		</form>
+			<input type="text" name="user_name" placeholder="이름을 입력해주세요." class="block">
+			<input type="text" name="user_id" placeholder="아이디를 입력해주세요." class="block">
+			<input type="password" name="user_pw" placeholder="비밀번호를 입력해주세요." class="block">
+			<input type="password" name="user_pw_confirm" placeholder="비밀번호 확인" class="block">
+			
+			<button type="submit" class="btn blue size_XL block">회원가입</button>
+			<a href="./login" class="btn size_XL block">취소</a>
+		</div>
+	</form>
+	<script type="text/javascript" src="/js/member/join.js"></script>
     </div>
 </html>

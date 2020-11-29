@@ -2,8 +2,12 @@ package com.lafin.abmaker.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,11 +22,12 @@ public class HomeController extends BaseController {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	// 서비스 연결
+	@Autowired
 	private MainService mainService;
 	
 	// autowired가 아닌 생성자 주입 방식
-	public HomeController(MainService mainService) {
-		this.mainService = mainService;
+	public HomeController(HttpServletRequest request, HttpServletResponse response) {
+		super(request, response);
 	}
 
 	@RequestMapping(value="/")

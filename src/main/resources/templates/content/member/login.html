@@ -4,15 +4,17 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/default}">
 
-    <div layout:fragment="content">
-        <h1 th:text="로그인"></h1>
-
-		<form name="userFrm" method="post" action="">
-			<input type="user_id">
-			<input type="user_pw">
+    <div class="ly-gradient grd01" layout:fragment="content">
+   	<form name="userFrm" method="post" action="./login">
+	   	<div class="login-frm">
+	        <h1>로그인</h1>	
 			
-			<button type="button">로그인</button>
-			<button type="button">회원가입</button>
-		</form>
+				<input type="text" name="user_id" placeholder="아이디를 입력해주세요." class="block">
+				<input type="password" name="user_pw" placeholder="비밀번호를 입력해주세요." class="block">
+				
+				<button type="submit" class="btn blue size_XL block">로그인</button>
+				<a href="./join" class="btn size_XL block">회원가입</a>
+		</div>
+	</form>
     </div>
 </html>
