@@ -14,7 +14,7 @@ public class BaseController {
 	
 	public BaseController(HttpServletRequest request, HttpServletResponse response) {
 		this.request = request;
-		this.response = response;		
+		this.response = response;
 	}
 	
 	public void init(Model model) {

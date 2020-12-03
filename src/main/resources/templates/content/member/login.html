@@ -2,19 +2,35 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/default}">
+      layout:decorate="~{layout/no_form}">
 
-    <div class="ly-gradient grd01" layout:fragment="content">
-   	<form name="userFrm" method="post" action="./login">
-	   	<div class="login-frm">
-	        <h1>로그인</h1>	
-			
-				<input type="text" name="user_id" placeholder="아이디를 입력해주세요." class="block">
-				<input type="password" name="user_pw" placeholder="비밀번호를 입력해주세요." class="block">
-				
-				<button type="submit" class="btn blue size_XL block">로그인</button>
-				<a href="./join" class="btn size_XL block">회원가입</a>
-		</div>
-	</form>
+	<div class="splash-container" layout:fragment="content">
+        <div class="card ">
+            <div class="card-header text-center"><a href="../index.html"><img class="logo-img" src="/images/logo.png" alt="logo"></a><span class="splash-description">Please enter your user information.</span></div>
+            <div class="card-body">
+                <form>
+                    <div class="form-group">
+                        <input class="form-control form-control-lg" id="username" type="text" placeholder="Username" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control form-control-lg" id="password" type="password" placeholder="Password">
+                    </div>
+                    <div class="form-group">
+                        <label class="custom-control custom-checkbox">
+                            <input class="custom-control-input" type="checkbox"><span class="custom-control-label">Remember Me</span>
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg btn-block">Sign in</button>
+                </form>
+            </div>
+            <div class="card-footer bg-white p-0  ">
+                <div class="card-footer-item card-footer-item-bordered">
+                    <a href="#" class="footer-link">Create An Account</a></div>
+                <div class="card-footer-item card-footer-item-bordered">
+                    <a href="#" class="footer-link">Forgot Password</a>
+                </div>
+            </div>
+        </div>
     </div>
+
 </html>

@@ -27,11 +27,11 @@ public class LoginInterceptor implements HandlerInterceptor{
 		UserDto userInfo = (UserDto) session.getAttribute("userInfo");
 		
 		if(ObjectUtils.isEmpty(userInfo)) {
-			logger.info("gotcha");
+			
+			logger.info( request.getRequestURL().toString() + " :: " + request.getQueryString() + " :: " + request.getHeader("referer") + " :: " + request.getMethod());
 			response.sendRedirect("/member/login");
 			result = false;
 		}else {
-			logger.info("interceptor true!!!!!!!!!!!!!!!");
 			result = true;
 		}
 		

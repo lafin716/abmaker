@@ -5,11 +5,25 @@
     <th:block th:fragment="configFragment">
         <title th:text="${APPNAME}"></title>
           
-        <!-- 이 영역에 공통으로 사용할 css, js library를 선언한다. -->
-        <link rel="stylesheet" th:href="@{/css/reset.css}" >
-        <link rel="stylesheet" th:href="@{/css/common.css}" >
-        
-        <script th:src="@{/js/common.js}"></script>
+        <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
+	    <link href="/vendor/fonts/circular-std/style.css" rel="stylesheet">
+	    <link rel="stylesheet" href="/css/style.css">
+	    <link rel="stylesheet" href="/vendor/fonts/fontawesome/css/fontawesome-all.css">
+	    <style>
+	    html,
+	    body {
+	        height: 100%;
+	    }
+	
+	    body {
+	        display: -ms-flexbox;
+	        display: flex;
+	        -ms-flex-align: center;
+	        align-items: center;
+	        padding-top: 40px;
+	        padding-bottom: 40px;
+	    }
+	    </style>
 
         <!-- Content Page의 CSS fragment 삽입 -->
         <th:block layout:fragment="css"></th:block>

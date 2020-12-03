@@ -38,7 +38,7 @@ public class Config extends WebMvcConfigurerAdapter{
 		
 		// TODO Auto-generated method stub
 		registry.addInterceptor(loginInterceptor)
-				.addPathPatterns("/**")
+				.addPathPatterns("/*")
 				.excludePathPatterns(exceptList);
 	}
 	
