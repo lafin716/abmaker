@@ -8,8 +8,24 @@
 	    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	    <meta name="description" content="">
 	    <meta name="author" content="">
-        <!-- config fragment 사용 -->
-        <th:block th:replace="fragment/config :: configFragment" ></th:block>
+       	<title th:text="${APPNAME}"></title>
+        <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
+	    <link rel="stylesheet" href="/vendor/fonts/circular-std/style.css">
+	    <link rel="stylesheet" href="/css/style.css">
+	    <link rel="stylesheet" href="/vendor/fonts/fontawesome/css/fontawesome-all.css">	    
+        <style>
+	    html,
+	    body {
+	        height: 100%;
+	    }
+	
+	    body {
+	        display: -ms-flexbox;
+	        display: flex;
+	        -ms-flex-align: center;
+	        align-items: center;
+	    }
+	    </style>
     </head>
     <body>
         <th:block layout:fragment="content"></th:block>
@@ -20,6 +36,9 @@
         <script src="/vendor/jquery/jquery-3.3.1.min.js"></script>
         <script src="/vendor/parsley/parsley.js"></script>
     	<script src="/vendor/bootstrap/js/bootstrap.bundle.js"></script>
+    	<script src="/js/common-modal.js"></script>
     	
+    	<!-- Content Page의 script fragment 삽입 -->
+        <th:block layout:fragment="script"></th:block>
     </body>
 </html>

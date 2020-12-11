@@ -1,7 +1,3 @@
 /**
  * 
  */
-
-function checkSubmit(obj){
-	
-}

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.lafin.abmaker.mapper.PageListMapper">
+
+	<select id="getTotal" parameterType="Integer" resultType="Integer">
+        SELECT count(*) as cnt 
+        FROM page_list
+        WHERE user_seq = #{user_seq}
+    </select>
+    
+    <select id="getPageList" parameterType="com.lafin.abmaker.dto.PageDto" resultType="com.lafin.abmaker.dto.PageDto">
+        SELECT * 
+        FROM page_list
+        WHERE user_seq = #{user_seq}
+        ORDER BY is_main DESC
+        LIMIT #{paging.startRow}, #{paging.rowSize}
+    </select>
+    
+    <select id="getPage" parameterType="com.lafin.abmaker.dto.PageDto" resultType="com.lafin.abmaker.dto.PageDto">
+        SELECT * 
+        FROM page_list
+        WHERE 1=1
+        AND page_seq = #{page_seq}
+    </select>
+    
+    <insert id="addPage" parameterType="com.lafin.abmaker.dto.PageDto">
+    	INSERT INTO page_list
+    	(`form_seq`, `page_title`, `order`, `regist_date`)
+    	VALUES
+    	(#{form_seq}, #{page_title}, 0, NOW())
+    </insert>
+    
+    <update id="modifyPage" parameterType="com.lafin.abmaker.dto.PageDto">
+    	UPDATE page_list
+    	SET page_title = #{page_title},
+    	    order = #{order}
+    	WHERE 1=1
+    	AND `page_seq` = #{page_seq}
+    </update>
+    
+    <delete id="deletePage" parameterType="com.lafin.abmaker.dto.PageDto">
+    	DELETE FROM page_list
+    	WHERE 1=1
+    	AND `page_seq` IN 
+    	<foreach collection="page_seq_list" item="code" index="index" separator="," open="(" close=")">
+	        #{code}
+	    </foreach>
+	</delete>
+    
+</mapper>

@@ -2,8 +2,29 @@
       xmlns:th="http://www.thymeleaf.org">
        
     <!--headerFragment 선언-->
-    <div th:fragment="headerFragment">
-    
-    </div>
+    <div class="dashboard-header" th:fragment="headerFragment">
+    	<nav class="navbar navbar-expand-lg bg-white fixed-top">
+            <a class="navbar-brand" href="/">AM</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse " id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto navbar-right-top">
+                    <li class="nav-item dropdown nav-user">
+                        <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="/images/avatar-1.jpg" alt="" class="user-avatar-md rounded-circle"></a>
+                        <div class="dropdown-menu dropdown-menu-right nav-user-dropdown" aria-labelledby="navbarDropdownMenuLink2">
+                            <div class="nav-user-info">
+                                <h5 class="mb-0 text-white nav-user-name" th:text="${session.userInfo.user_name}"></h5>
+                                <span th:text="${session.userInfo.user_email}"></span>
+                            </div>
+                            <a class="dropdown-item" href="/member/mypage"><i class="fas fa-user mr-2"></i>마이페이지</a>
+                            <a class="dropdown-item" href="/setting"><i class="fas fa-cog mr-2"></i>설정</a>
+                            <a class="dropdown-item" href="/member/logout"><i class="fas fa-power-off mr-2"></i>로그아웃</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>   
     
 </html>

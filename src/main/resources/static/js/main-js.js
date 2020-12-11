@@ -1,6 +1,8 @@
 
 jQuery(document).ready(function($) {
     'use strict';
+    
+    
 
     // ============================================================== 
     // Notification list
@@ -98,35 +100,22 @@ jQuery(document).ready(function($) {
 
         });
     }
-    // ============================================================== 
-    // dropzone script
-    // ============================================================== 
-
- //     if ($('.dz-clickable').length) {
- //            $(".dz-clickable").dropzone({ url: "/file/post" });
- // }
+        
+    
+    initCheckAll();
 
 }); // AND OF JQUERY
 
-
-// $(function() {
-//     "use strict";
-
-
-    
-
-   // var monkeyList = new List('test-list', {
-    //    valueNames: ['name']
-
-     // });
-  // var monkeyList = new List('test-list-2', {
-    //    valueNames: ['name']
-
-   // });
-
-
-
-   
-   
-
-// });
+// 체크박스 all
+function initCheckAll(){
+	$('.chkAll').click(function(){
+		checkFlag = $(this).prop('checked');
+		targetClassName = $(this).attr('data-target');
+		
+		if(checkFlag){
+			$('.'+targetClassName).prop('checked', true);
+		}else{
+			$('.'+targetClassName).prop('checked', false);
+		}
+	});
+}

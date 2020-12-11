@@ -9,15 +9,8 @@
         SELECT * 
         FROM user_list
         WHERE 1=1
-        AND user_id = #{user_id}
-        AND user_pw = md5(#{user_pw})
-    </select>
-    
-    <select id="getMemberCountById" parameterType="String" resultType="Integer">
-        SELECT COUNT(*) as cnt 
-        FROM user_list
-        WHERE 1=1
-        AND user_id = #{user_id}
+        AND user_email = #{user_email}
+        AND user_pw = password(#{user_pw})
     </select>
     
     <select id="getMemberCountByEmail" parameterType="String" resultType="Integer">
@@ -29,9 +22,9 @@
     
     <insert id="setMember" parameterType="com.lafin.abmaker.dto.UserDto">
     	INSERT INTO user_list
-    	(`user_id`,`user_pw`,`user_name`,`user_email`,`user_status`,`regist_date`)
+    	(`user_pw`,`user_name`,`user_email`,`user_status`,`regist_date`)
     	VALUES
-    	(#{user_id}, md5(#{user_pw}), #{user_name}, #{user_email}, #{user_status}, NOW())
+    	(md5(#{user_pw}), #{user_name}, #{user_email}, #{user_status}, NOW())
     </insert>
     
 </mapper>

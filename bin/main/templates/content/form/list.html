@@ -2,22 +2,128 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/default}">
+      layout:decorate="~{layout/data_table}">
+    
+    <script layout:fragment="script">
+	function addForm(){
+		openLayerForm('양식추가', 'ly_addform', { action: '/form/add', method: 'post', target: 'actionFrame' });
+	}
+	
+	function deleteForm(){
+		if($('.form_seq:checked').length > 0){
+			openDialog('양식삭제', '정말 삭제하시겠습니까? 삭제 후 복구가 불가능합니다.', function(){ $('#delForm').submit(); }, null);	
+		}else{
+			openAlert('삭제할 양식을 선택해주세요.', null);
+		}
+			
+	}
+	</script>
 
-    <div layout:fragment="content">
-        <h1 th:text="${pageTitle}"></h1>
+    <div class="container-fluid  dashboard-content" layout:fragment="content">
+		<!-- ============================================================== -->
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="page-header">
+                    <h2 class="pageheader-title">양식관리</h2>                    
+                </div>
+            </div>
+        </div>
+        <!-- ============================================================== -->
         
-        <table class="table_basic">
-        	<tr>
-        		<th>번호</th>
-        		<th>양식명</th>
-        		<th>생성날짜</th>
-        	</tr>
-	        <tr th:each="form : ${formList}" th:onclick="|javascript:movePage('${form.formSeq}');|">
-		         <td th:text="${form.formSeq}">번호</td>    
-		         <td th:text="${form.formTitle}">name</td>
-		         <td th:text="${form.registDate}">stat</td>
-		     </tr>
-	     </table>
+        <div class="row">
+        	<!-- ============================================================== -->
+            <!-- 양식 목록  -->
+            <!-- ============================================================== -->
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                        	<div class="row">
+                        		<div class="col-sm-12">
+                        			<div class="dt-buttons">
+		                        		<button class="btn btn-outline-light buttons-add buttons-html5" tabindex="0" type="button" onclick="addForm();"><span>추가</span></button> 
+			                        	<button class="btn btn-outline-light buttons-del buttons-html5" tabindex="0" type="button" onclick="deleteForm();"><span>삭제</span></button>
+		                        	</div> 
+                        		</div>
+                        	</div>
+                        	<div class="row">
+                        		<div class="col-sm-12">
+                        			<form id="delForm" method="post" action="/form/delete" target="actionFrame">
+		                            <table class="table table-striped table-bordered dataTable" style="width:100%">
+		                            	<colgroup>
+		                            		<col width="5%">
+		                            		<col width="7%">
+		                            		<col width="*">
+		                            		<col width="15%">
+		                            		<col width="7%">
+		                            	</colgroup>
+		                                <thead>
+		                                    <tr>
+		                                    	<th>
+		                                    		<label class="custom-control custom-checkbox">
+		                                                <input type="checkbox" class="custom-control-input chkAll" data-target="form_seq"><span class="custom-control-label"></span>
+		                                            </label>
+                                            	</th>
+		                                        <th>번호</th>
+		                                        <th>양식명</th>
+		                                        <th>등록날짜</th>
+		                                        <th>수정</th>
+		                                    </tr>
+		                                </thead>
+		                                <tbody>
+		                                	<tr th:if="${#lists.size(formList) == 0}">
+												<td colspan="5">등록된 양식이 없습니다.</td>
+											</tr>
+										    <tr th:unless="${#lists.size(formList) == 0}" th:each="form : ${formList}">
+										    	<td>
+										    		<label class="custom-control custom-checkbox">
+		                                                <input type="checkbox" class="custom-control-input form_seq" name="form_seq_list" th:value="${form.form_seq}"><span class="custom-control-label"></span>
+		                                            </label>
+		                                		<td th:text="${form.form_seq}"></td> 
+		                                		
+		                                		<th:block th:if="${form.is_main} == 1">
+		                                		<td th:text="[기본] + ${form.form_title}"></td>
+		                                		</th:block> 
+		                                		<th:block th:unless="${form.is_main} == 1">
+		                                		<td th:text="${form.form_title}"></td>
+		                                		</th:block>
+		                                		
+		                                		<td th:text="${form.regist_date}"></td> 
+		                                		<td><a th:href="@{/form/view?form_seq={no} (no = ${form.form_seq})}" class="btn btn-primary">수정</a></td> 
+		                                	</tr>
+		                                </tbody>
+		                            </table>
+		                            </form>
+	                            </div>
+                            </div>
+                            <div class="row">
+                            	<div class="col-sm-12">
+	                            	<ul class="pagination">
+	                            	
+	                            	<th:block th:if="${paging.totalPage} > 0">
+	                            		<li class="paginate_button page-item"><a class="page-link" th:href="@{/form/list?page={page} (page = ${paging.prevPage})}">이전</a></li>
+	                            	  <th:block th:with="start = ${paging.startPage}, end = ${paging.endPage}" th:each="pageButton : ${#numbers.sequence(paging.startPage, paging.endPage)}">
+									    <li class="paginate_button page-item" th:classappend="${paging.currentPage == pageButton} ? active"><a class="page-link" th:href="@{/form/list?page={page} (page = ${pageButton})}" th:text=${pageButton}></a></li>
+									  </th:block>
+									    <li class="paginate_button page-item"><a class="page-link" th:href="@{/form/list?page={page} (page = ${paging.nextPage})}">다음</a></li>
+									</th:block>
+									</ul>
+								</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ============================================================== -->
+            <!-- 양식 목록  -->
+            <!-- ============================================================== -->
+        </div>
+        
+        <div id="ly_addform" class="hide">
+	        <div class="form-group">
+	            <label class="col-form-label">양식명</label>
+	            <input type="text" class="form-control" name="form_title" required="" placeholder="양식명을 입력해주세요.">
+	        </div>
+        </div>
     </div>
 </html>

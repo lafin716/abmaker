@@ -4,18 +4,63 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
     
 <mapper namespace="com.lafin.abmaker.mapper.FormListMapper">
-        
-    <select id="getFormList" resultType="com.lafin.abmaker.dto.FormDto">
-        SELECT * 
+
+	<select id="getTotal" parameterType="Integer" resultType="Integer">
+        SELECT count(*) as cnt 
         FROM form_list
-        ORDER BY is_main DESC
+        WHERE user_seq = #{user_seq}
     </select>
     
-    <select id="getPageList" parameterType="Integer" resultType="com.lafin.abmaker.dto.PageDto">
+    <select id="getFormListAll" parameterType="Integer" resultType="com.lafin.abmaker.dto.FormDto">
         SELECT * 
-        FROM page_list
-        WHERE 1=1 
-        AND form_seq = #{formSeq}
+        FROM form_list
+        WHERE user_seq = #{user_seq}
     </select>
+        
+    <select id="getFormList" parameterType="com.lafin.abmaker.form.BoardForm" resultType="com.lafin.abmaker.dto.FormDto">
+        SELECT * 
+        FROM form_list
+        WHERE user_seq = #{user_seq}
+        ORDER BY is_main DESC
+        LIMIT #{paging.startRow}, #{paging.rowSize}
+    </select>
+    
+    <select id="getForm" parameterType="com.lafin.abmaker.dto.FormDto" resultType="com.lafin.abmaker.dto.FormDto">
+        SELECT * 
+        FROM form_list
+        WHERE 1=1
+        AND user_seq = #{user_seq}
+        AND form_seq = #{form_seq}
+    </select>
+    
+    <insert id="addForm" parameterType="com.lafin.abmaker.dto.FormDto">
+    	INSERT INTO form_list
+    	(`user_seq`, `form_title`, `is_main`, `regist_date`)
+    	VALUES
+    	(#{user_seq}, #{form_title}, #{is_main}, NOW())
+    </insert>
+    
+    <update id="modifyForm" parameterType="com.lafin.abmaker.dto.FormDto">
+    	UPDATE form_list
+    	SET form_title = #{form_title}
+    	WHERE 1=1
+    	AND `user_seq` = #{user_seq}
+    	AND `form_seq` = #{form_seq}
+    </update>
+    
+    <delete id="deleteForm" parameterType="com.lafin.abmaker.dto.FormDto">
+    	DELETE FROM form_list
+    	WHERE 1=1
+    	AND `user_seq` = #{user_seq}
+    	AND `form_seq` IN 
+    	<foreach collection="form_seq_list" item="code" index="index" separator="," open="(" close=")">
+	        #{code}
+	    </foreach>
+	</delete>
+    
+    <update id="setMainForm" parameterType="com.lafin.abmaker.dto.FormDto">
+    	UPDATE form_list SET is_main = 0 WHERE user_seq = #{user_seq};	    
+    	UPDATE form_list SET is_main = 1 WHERE user_seq = #{user_seq} AND form_seq = #{form_seq};
+    </update>
     
 </mapper>

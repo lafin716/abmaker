@@ -26,15 +26,14 @@ public class LoginInterceptor implements HandlerInterceptor{
 		HttpSession session = request.getSession();
 		UserDto userInfo = (UserDto) session.getAttribute("userInfo");
 		
-		if(ObjectUtils.isEmpty(userInfo)) {
-			
+		if(ObjectUtils.isEmpty(userInfo)) {			
 			logger.info( request.getRequestURL().toString() + " :: " + request.getQueryString() + " :: " + request.getHeader("referer") + " :: " + request.getMethod());
 			response.sendRedirect("/member/login");
 			result = false;
 		}else {
+			logger.info(userInfo.getUser_email());
 			result = true;
 		}
-		
 		
 		return result;
 	}

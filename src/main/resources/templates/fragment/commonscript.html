@@ -1,0 +1,23 @@
+<html lang="ko" 
+      xmlns:th="http://www.thymeleaf.org">
+      
+    <!-- 공통 스크립트 선언-->
+    <script th:inline="javascript" th:fragment="scriptFragment">
+    
+    	// 페이지 네비게이션 스크립트
+    	$(document).ready(function(){
+    		segment = /*[[${segment1}]]*/;
+    		
+    		// 세그먼트가 존재 할 경우 해당되는 메뉴를 활성화
+    		if(segment != null && segment != ''){
+    			// 메인메뉴 활성화
+    			menuObj = $('#menu_' + segment);
+    			menuObj.addClass('active');
+    			
+    			// 서브메뉴 활성화
+    			subObj = $(menuObj.attr('data-target'));
+    			subObj.addClass('show');
+    		}
+    	});
+    </script>
+</html>

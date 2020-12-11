@@ -3,25 +3,62 @@
       
     <!--footerFragment 선언-->
     <div th:fragment="footerFragment">
-    
-    	<!-- Button trigger modal -->
-	    <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Launch demo modal</a>
-	    <!-- Modal -->
-	    <div class="modal fade" id="modalFrame" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    	<!-- 비동기 통신 프레임 -->
+    	<iframe id="actionFrame" name="actionFrame" class="hide"></iframe>
+    		
+	    <!-- Modal 팝업 프레임-->
+	    <div class="modal fade hide" id="modalFrame" tabindex="-1" role="dialog" aria-hidden="true">
 	        <div class="modal-dialog" role="document">
 	            <div class="modal-content">
 	                <div class="modal-header">
-	                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+	                    <h5 class="modal-title"></h5>
 	                    <a href="#" class="close" data-dismiss="modal" aria-label="Close">
-	                                <span aria-hidden="true">&times;</span>
-	                            </a>
+                            <span aria-hidden="true">&times;</span>
+                        </a>
 	                </div>
-	                <div class="modal-body">
-	                    <p>Woohoo, You are readng this text in a modal! Use Bootstrap’s JavaScript modal plugin to add dialogs to your site for lightboxes, user notifications, or completely custom content.</p>
-	                </div>
+	                <div class="modal-body"></div>
 	                <div class="modal-footer">
-	                    <a href="#" class="btn btn-secondary" data-dismiss="modal">Close</a>
-	                    <a href="#" class="btn btn-primary">Save changes</a>
+	                	<a href="#" class="btn btn-sm btn-primary modal-confirm">확인</a>
+	                    <a href="#" class="btn btn-sm btn-light modal-close" data-dismiss="modal">닫기</a>	                    
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	    
+	    <!-- Form 팝업 프레임-->
+	    <div class="modal fade hide" id="formFrame" tabindex="-1" role="dialog" aria-hidden="true">
+	        <div class="modal-dialog" role="document">
+	        	<form class="temp-form">
+		            <div class="modal-content">
+		                <div class="modal-header">
+		                    <h5 class="modal-title"></h5>
+		                    <a href="#" class="close" data-dismiss="modal" aria-label="Close">
+	                            <span aria-hidden="true">&times;</span>
+	                        </a>
+		                </div>
+		                <div class="modal-body"></div>
+		                <div class="modal-footer">
+		                	<button type="submit" class="btn btn-sm btn-success modal-confirm">저장</button>
+		                    <a href="#" class="btn btn-sm btn-light modal-close" data-dismiss="modal">취소</a>	                    
+		                </div>
+		            </div>
+	            </form>
+	        </div>
+	    </div>
+	    
+	    <!-- Alert 팝업 프레임-->
+	    <div class="modal fade hide" id="alertFrame" tabindex="-1" role="dialog" aria-hidden="true">
+	        <div class="modal-dialog" role="document">
+	            <div class="modal-content">
+	                <div class="modal-header">
+	                    <h5 class="modal-title"><i class="fas fa-exclamation-circle"></i> 알림</h5>
+	                    <a href="#" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </a>
+	                </div>
+	                <div class="modal-body"></div>
+	                <div class="modal-footer">
+	                    <a href="#" class="btn btn-sm btn-light modal-close" data-dismiss="modal">확인</a>	                    
 	                </div>
 	            </div>
 	        </div>

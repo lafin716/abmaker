@@ -1,17 +1,19 @@
 package com.lafin.abmaker.common;
 
-import java.util.List;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.lafin.abmaker.interceptor.LoginInterceptor;
 
 @Configuration
-public class Config extends WebMvcConfigurerAdapter{
+public class Config implements WebMvcConfigurer{
+	
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	// 앱 전역 공통 변수
 	@Value("${app.info.name}")
@@ -31,14 +33,14 @@ public class Config extends WebMvcConfigurerAdapter{
 	
 	// 인터셉터 제외목록
 	@Value("${interceptor.except.list}")
-	List<String> exceptList;
+	String[] exceptList;
 	
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		
-		// TODO Auto-generated method stub
+		// 로그인 체크
 		registry.addInterceptor(loginInterceptor)
-				.addPathPatterns("/*")
+				.addPathPatterns("/**")
 				.excludePathPatterns(exceptList);
 	}
 	

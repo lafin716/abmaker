@@ -1,44 +1,21 @@
 package com.lafin.abmaker.dto;
 
 import java.util.Date;
+import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter @Setter @ToString
 public class PageDto {
-	private Integer pageSeq;
-	private Integer formSeq;
-	private String pageTitle;
+	private Integer page_seq;
+	private List<Integer> page_seq_list;
+	private Integer form_seq;
+	private String page_title;
 	private Integer order;
-	private Date registDate;
-	
-	public Integer getPageSeq() {
-		return pageSeq;
-	}
-	public void setPageSeq(Integer pageSeq) {
-		this.pageSeq = pageSeq;
-	}
-	public Integer getFormSeq() {
-		return formSeq;
-	}
-	public void setFormSeq(Integer formSeq) {
-		this.formSeq = formSeq;
-	}
-	public String getPageTitle() {
-		return pageTitle;
-	}
-	public void setPageTitle(String pageTitle) {
-		this.pageTitle = pageTitle;
-	}
-	public Integer getOrder() {
-		return order;
-	}
-	public void setOrder(Integer order) {
-		this.order = order;
-	}
-	public Date getRegistDate() {
-		return registDate;
-	}
-	public void setRegistDate(Date registDate) {
-		this.registDate = registDate;
-	}
-	
-	
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date regist_date;
 }

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/data_table}">
+    
+    <script layout:fragment="script">
+	function addForm(){
+		openLayerForm('양식추가', 'ly_addform', { action: '/form/add', method: 'post', target: 'actionFrame' });
+	}
+	
+	</script>
+
+    <div class="container-fluid  dashboard-content" layout:fragment="content">
+		<!-- ============================================================== -->
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="page-header">
+                    <h2 class="pageheader-title">양식관리</h2>                    
+                </div>
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        
+        <div class="row">
+        	<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+        		<form id="modifyForm" method="post" action="/form/modify" target="actionFrame" data-parsley-validate="">
+	        	<div class="card">
+	                <h5 class="card-header">양식수정</h5>
+	                <div class="card-body">
+                    	<input type="hidden" name="form_seq" th:value="${formData.form_seq}">
+                        <div class="form-group">
+                            <label for="formTitle" class="col-form-label">양식명</label>
+                            <input id="formTitle" type="text" class="form-control" name="form_title" th:value="${formData.form_title}" required="required" >
+                        </div>
+                        <div class="form-group">
+                            <label for="isMain" class="col-form-label">기본 양식 여부</label>
+                            <select class="form-control" id="isMain" name="is_main">
+                                <option value="1" th:attr="selected=${formData.is_main} == 1 ? 'true' : 'false'">예</option>
+                                <option value="0" th:attr="selected=${formData.is_main} == 0 ? 'true' : 'false'">아니오</option>                                
+                            </select>
+                        </div>
+	                </div>
+	                <div class="card-footer">
+	                	<button type="submit" class="btn btn-primary">저장</button>
+	                	<a href="/form/list" class="btn btn-secondary">취소</a>
+	                </div>
+	            </div>
+	            </form>
+            </div>
+        </div>
+    </div>
+</html>

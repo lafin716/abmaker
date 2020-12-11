@@ -18,8 +18,7 @@ jQuery(document).ready(function($) {
                 buttons: ['copy', 'excel', 'pdf', 'print', 'colvis']
             });
 
-            table.buttons().container()
-                .appendTo('#example_wrapper .col-md-6:eq(0)');
+            table.buttons().container().appendTo('#example_wrapper .col-md-6:eq(0)');
         });
     }
 

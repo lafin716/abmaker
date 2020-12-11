@@ -6971,8 +6971,14 @@ Media Query
     padding: 17px 29px;}
 }
 
-
+.simple-card .nav.nav-tabs .nav-item-btn {
+	padding: 17px 25px;
+}
 
 
 /* Custom, iPhone Retina */
 @media only screen and (max-width:320px) {}
+
+.hide { display: none; }
+
+

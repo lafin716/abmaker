@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/no_form}">
+<head>
+	<style>
+	.dashboard-main-wrapper { width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center;}
+	</style>
+</head>
+    <div class="dashboard-main-wrapper p-0" layout:fragment="content">
+        <div class="bg-light text-center">
+            <div class="container">
+                <div class="row">
+                    <div class="offset-xl-2 col-xl-8 offset-lg-2 col-lg-8 col-md-12 col-sm-12 col-12">
+                        <div class="error-section">
+                            <div class="error-section-content">
+                                <h1 class="display-5">요청이 잘못되었습니다.</h1>
+                                <p>페이지주소를 다시 확인해 주세요.</p>
+                                <a href="/" class="btn btn-secondary btn-lg">메인으로 이동</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</html>
