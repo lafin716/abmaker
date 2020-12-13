@@ -134,5 +134,12 @@ public class MemberServiceImpl extends BaseService implements MemberService{
 		
 		return result;
 	}
+
+	@Override
+	public UserDto getMemberInfo(String user_email) {
+		return userListMapper.getMemberByEmail(user_email);
+	}
+	
+	
 	
 }

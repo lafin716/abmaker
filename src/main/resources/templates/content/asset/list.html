@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/data_table}">
+    
+    <script layout:fragment="script">
+	function addAsset(){
+		openLayerForm('자산추가', 'ly_addasset', { action: '/asset/add', method: 'post', target: 'actionFrame' });
+	}
+	
+	function deleteAsset(){
+		if($('.asset_seq:checked').length > 0){
+			openDialog('자산삭제', '정말 삭제하시겠습니까? 삭제 후 복구가 불가능합니다.', function(){ $('#delForm').submit(); }, null);	
+		}else{
+			openAlert('삭제할 자산을 선택해주세요.', null);
+		}
+			
+	}
+	</script>
+
+    <div class="container-fluid  dashboard-content" layout:fragment="content">
+		<!-- ============================================================== -->
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="page-header">
+                    <h2 class="pageheader-title">자산관리</h2>                    
+                </div>
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        
+        <div class="row">
+        	<!-- ============================================================== -->
+            <!-- 페이지 목록  -->
+            <!-- ============================================================== -->
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                        	<div class="row">
+                        		<div class="col-sm-8">
+                        			<div class="dt-buttons">
+		                        		<button class="btn btn-sm btn-outline-light buttons-add buttons-html5" tabindex="0" type="button" onclick="addAsset();"><span>추가</span></button> 
+			                        	<button class="btn btn-sm btn-outline-light buttons-del buttons-html5" tabindex="0" type="button" onclick="deleteAsset();"><span>삭제</span></button>
+		                        	</div> 
+                        		</div>
+                        		<div class="col-sm-4">
+                        			<form id="searchForm" method="get" action="/asset/list">
+	                        			<div class="input-group">
+	                                        <select class="form-control" name="link_seq" required="required">
+								            	<th:block th:each="formData : ${formList}" th:with="searchSeq=${#strings.defaultString(param.form_seq, '0')}">
+								                <option th:text="${formData.form_title}" th:value="${formData.form_seq}" th:attr="selected=${formData.form_seq} == ${searchSeq} ? 'true' : 'false'"></option>
+								                </th:block>
+								            </select>
+	                                        <div class="input-group-append">
+	                                            <button type="submit" class="btn btn-sm btn-outline-light buttons-html5">검색</button>
+	                                        </div>
+	                                    </div>
+	                                    
+						            </form>
+                        		</div>
+                        	</div>
+                        	<div class="row">
+                        		<div class="col-sm-12">
+                        			<form id="delForm" method="post" action="/asset/delete" target="actionFrame">
+		                            <table class="table table-striped table-bordered dataTable" style="width:100%">
+		                            	<colgroup>
+		                            		<col width="5%">		                            		
+		                            		<col width="20%">
+		                            		<col width="*%">
+		                            		<col width="15%">
+		                            		<col width="15%">
+		                            		<col width="7%">
+		                            	</colgroup>
+		                                <thead>
+		                                    <tr>
+		                                    	<th>
+		                                    		<label class="custom-control custom-checkbox">
+		                                                <input type="checkbox" class="custom-control-input chkAll" data-target="asset_seq"><span class="custom-control-label"></span>
+		                                            </label>
+                                            	</th>
+		                                        <th>양식명</th>
+		                                        <th>자산명</th>
+		                                        <th>자산잔액</th>
+		                                        <th>등록날짜</th>
+		                                        <th>수정</th>
+		                                    </tr>
+		                                </thead>
+		                                <tbody>
+		                                	<tr th:if="${#lists.size(assetList) == 0}">
+												<td colspan="6">등록된 자산이 없습니다.</td>
+											</tr>
+										    <tr th:unless="${#lists.size(assetList) == 0}" th:each="asset : ${assetList}">
+										    	<td>
+										    		<label class="custom-control custom-checkbox">
+		                                                <input type="checkbox" class="custom-control-input asset_seq" name="asset_seq_list" th:value="${asset.asset_seq}"><span class="custom-control-label"></span>
+		                                            </label>
+		                                		<td th:text="${asset.form_title}"></td>
+		                                		<td th:text="${asset.asset_name}"></td>		                                		
+		                                		<td th:text="${#numbers.formatDecimal(asset.amount, 3, 'COMMA', 0, 'POINT')}"></td>		                                		
+		                                		<td th:text="${#dates.format(asset.regist_date, 'yyyy-MM-dd HH:mm:ss')}" ></td> 
+		                                		<td><a th:href="@{/asset/view?asset_seq={no} (no = ${asset.asset_seq})}" class="btn btn-primary">수정</a></td> 
+		                                	</tr>
+		                                </tbody>
+		                            </table>
+		                            </form>
+	                            </div>
+                            </div>
+                            <div class="row">
+                            	<div class="col-sm-12">
+	                            	<ul class="pagination">
+	                            	
+	                            	<th:block th:if="${paging.totalPage} > 0">
+	                            		<li class="paginate_button page-item"><a class="page-link" th:href="@{/form/list?page={page} (page = ${paging.prevPage})}">이전</a></li>
+	                            	  <th:block th:with="start = ${paging.startPage}, end = ${paging.endPage}" th:each="pageButton : ${#numbers.sequence(paging.startPage, paging.endPage)}">
+									    <li class="paginate_button page-item" th:classappend="${paging.currentPage == pageButton} ? active"><a class="page-link" th:href="@{/form/list?page={page} (page = ${pageButton})}" th:text=${pageButton}></a></li>
+									  </th:block>
+									    <li class="paginate_button page-item"><a class="page-link" th:href="@{/form/list?page={page} (page = ${paging.nextPage})}">다음</a></li>
+									</th:block>
+									</ul>
+								</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ============================================================== -->
+            <!-- 자산 목록  -->
+            <!-- ============================================================== -->
+        </div>
+        
+        <div id="ly_addasset" class="hide">
+        	<input type="hidden" name="asset_type" value="form" >
+	        <div class="form-group">
+	            <label class="col-form-label">양식선택</label>	 
+	            <select class="form-control" name="link_seq" required="required">
+	            	<th:block th:each="formData : ${formList}" th:with="searchSeq=${#strings.defaultString(param.form_seq, '0')}">
+	                <option th:text="${formData.form_title}" th:value="${formData.form_seq}" th:attr="selected=${formData.form_seq} == ${searchSeq} ? 'true' : 'false'"></option>
+	                </th:block>                                
+	            </select>           
+	        </div>
+	        <div class="form-group">
+	            <label class="col-form-label">자산명</label>
+	            <input type="text" class="form-control" name="asset_name" required="required" placeholder="자산명을 입력해주세요.">
+	        </div>
+	        <div class="form-group">
+	            <label class="col-form-label">자산잔액</label>
+	            <input type="text" class="form-control" name="amount" required="required" placeholder="자산의 잔액을 입력해주세요.">
+	        </div>
+	        <div class="form-group">
+	            <label class="col-form-label">메모</label>
+	            <textarea class="form-control" name="memo"></textarea>
+	        </div>
+        </div>
+    </div>
+</html>

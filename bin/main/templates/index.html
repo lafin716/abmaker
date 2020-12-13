@@ -4,19 +4,12 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/default}">
       
-    <script layout:fragment="script">
-	function addPage(){
-		openLayerForm('페이지추가', 'ly_addpage', { action: '/page/add', method: 'post', target: 'actionFrame' });
-	}
-	
-	</script>
-
     <div class="container-fluid  dashboard-content" layout:fragment="content">
 		<!-- ============================================================== -->
         <div class="row">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                 <div class="page-header">
-                    <h2 class="pageheader-title">양식1</h2>                    
+                    <h2 class="pageheader-title" th:text="${mainForm.form_title}"></h2>                    
                 </div>
             </div>
         </div>
@@ -25,39 +18,37 @@
         <div class="row">
         	<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-5">
                 <div class="simple-card">
-                    <ul class="nav nav-tabs" id="myTab5" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active border-left-0" id="home-tab-simple" data-toggle="tab" href="#home-simple" role="tab" aria-controls="home" aria-selected="true">1월통계</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="profile-tab-simple" data-toggle="tab" href="#profile-simple" role="tab" aria-controls="profile" aria-selected="false">2월통계</a>
-                        </li>
-                        <li class="nav-item-btn">
-                            <a href="javascript:addPage();"><i class="fas fa-plus-circle fa-lg text-success"></i></a>
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item"  th:if="${#lists.size(pageList) > 0}" th:each="pageData : ${pageList}">
+                            <a class="nav-link border-left-0" th:classappend="${pageData.page_seq} == ${pageSeq} ? active" th:href="@{/?page_seq={page} (page = ${pageData.page_seq})}" th:text="${pageData.page_title}"></a>
                         </li>
                     </ul>
-                    <div class="tab-content" id="myTabContent5">
-                        <div class="tab-pane fade show active" id="home-simple" role="tabpanel" aria-labelledby="home-tab-simple">
-                            <p class="lead"> All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. </p>
-                            <p>Phasellus non ante gravida, ultricies neque a, fermentum leo. Etiam ornare enim arcu, at venenatis odio mollis quis. Mauris fermentum elementum ligula in efficitur. Aliquam id congue lorem. Proin consectetur feugiasse platea dictumst. Pellentesque sed justo aliquet, posuere sem nec, elementum ante.</p>
-                            <a href="#" class="btn btn-secondary">Go somewhere</a>
-                        </div>
-                        <div class="tab-pane fade" id="profile-simple" role="tabpanel" aria-labelledby="profile-tab-simple">
-                            <p>Nullam et tellus ac ligula condimentum sodales. Aenean tincidunt viverra suscipit. Maecenas id molestie est, a commodo nisi. Quisque fringilla turpis nec elit eleifend vestibulum. Aliquam sed purus in odio ullamcorper congue consectetur in neque. Aenean sem ex, tempor et auctor sed, congue id neque. </p>
-                        </div>
-                        <div class="tab-pane fade" id="contact-simple" role="tabpanel" aria-labelledby="contact-tab-simple">
-                            <p>Vivamus pellentesque vestibulum lectus vitae auctor. Maecenas eu sodales arcu. Fusce lobortis, libero ac cursus feugiat, nibh ex ultricies tortor, id dictum massa nisl ac nisi. Fusce a eros pellentesque, ultricies urna nec, consectetur dolor. Nam dapibus scelerisque risus, a commodo mi tempus eu.</p>
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" >
+	                        <th:block th:if="${#lists.size(compLinkList) > 0}" th:each="compLink : ${compLinkList}">
+	                        	<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+	                        		<form method="post" action="/asset/calculate" target="actionFrame">
+	                        		<div class="form-group">
+                                         <label for="inputText3" class="col-form-label" th:text="${compLink.comp_name}"></label>
+                                         
+                                         <div class="input-group">
+                                         	<input type="hidden" name="asset_seq" th:value="${compLink.asset_seq}">
+                                         	<input type="hidden" name="comp_seq" th:value="${compLink.comp_seq}">
+                                            <input type="hidden" name="type" th:value="${compLink.type}">
+                                         	<input type="text" class="form-control" name="">
+                                         	
+                                         	<div class="input-group-append">
+                                         		<button type="submit" class="btn btn-sm btn-outline-light buttons-html5">저장</button>
+                                         	</div>
+                                         </div>
+                                     </div>
+                                     </form>
+	                        	</div>
+				            </th:block>	                            
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        
-        <div id="ly_addpage" class="hide">
-	        <div class="form-group">
-	            <label class="col-form-label">페이지명</label>
-	            <input type="text" class="form-control" name="page_name" required="" placeholder="페이지명을 입력해주세요.">
-	        </div>
         </div>
     </div>
 </html>

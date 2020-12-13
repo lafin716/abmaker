@@ -13,6 +13,13 @@
         AND user_pw = password(#{user_pw})
     </select>
     
+    <select id="getMemberByEmail" parameterType="String" resultType="com.lafin.abmaker.dto.UserDto">
+        SELECT * 
+        FROM user_list
+        WHERE 1=1
+        AND user_email = #{user_email}
+    </select>
+    
     <select id="getMemberCountByEmail" parameterType="String" resultType="Integer">
         SELECT COUNT(*) as cnt 
         FROM user_list

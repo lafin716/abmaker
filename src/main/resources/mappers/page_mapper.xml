@@ -8,18 +8,43 @@
 	<select id="getTotal" parameterType="Integer" resultType="Integer">
         SELECT count(*) as cnt 
         FROM page_list
-        WHERE user_seq = #{user_seq}
+        <if test="form_seq != null">
+        WHERE form_seq = #{form_seq}
+        </if>
     </select>
     
-    <select id="getPageList" parameterType="com.lafin.abmaker.dto.PageDto" resultType="com.lafin.abmaker.dto.PageDto">
-        SELECT * 
-        FROM page_list
-        WHERE user_seq = #{user_seq}
-        ORDER BY is_main DESC
+    <select id="getPageList" parameterType="com.lafin.abmaker.form.BoardForm" resultType="com.lafin.abmaker.dto.PageDto">
+        SELECT p.*, f.form_title 
+        FROM page_list as p
+        LEFT JOIN form_list as f
+        ON p.form_seq = f.form_seq
+        <if test="form_seq != null">
+        WHERE p.form_seq = #{form_seq}        
+        </if>
+        ORDER BY p.order ASC
         LIMIT #{paging.startRow}, #{paging.rowSize}
     </select>
     
+    <select id="getPageListByFormSeq" parameterType="Integer" resultType="com.lafin.abmaker.dto.PageDto">
+        SELECT p.*, f.form_title 
+        FROM page_list as p
+        LEFT JOIN form_list as f
+        ON p.form_seq = f.form_seq
+        <if test="form_seq != null">
+        WHERE p.form_seq = #{form_seq}        
+        </if>
+        ORDER BY p.order ASC
+    </select>
+    
+    
     <select id="getPage" parameterType="com.lafin.abmaker.dto.PageDto" resultType="com.lafin.abmaker.dto.PageDto">
+        SELECT * 
+        FROM page_list
+        WHERE 1=1
+        AND page_seq = #{page_seq}
+    </select>
+    
+    <select id="getPageById" parameterType="Integer" resultType="com.lafin.abmaker.dto.PageDto">
         SELECT * 
         FROM page_list
         WHERE 1=1
@@ -30,13 +55,13 @@
     	INSERT INTO page_list
     	(`form_seq`, `page_title`, `order`, `regist_date`)
     	VALUES
-    	(#{form_seq}, #{page_title}, 0, NOW())
+    	(#{form_seq}, #{page_title}, #{order}, NOW())
     </insert>
     
     <update id="modifyPage" parameterType="com.lafin.abmaker.dto.PageDto">
     	UPDATE page_list
-    	SET page_title = #{page_title},
-    	    order = #{order}
+    	SET `page_title` = #{page_title},
+    	    `order` = #{order}
     	WHERE 1=1
     	AND `page_seq` = #{page_seq}
     </update>
@@ -49,5 +74,34 @@
 	        #{code}
 	    </foreach>
 	</delete>
+	
+	<select id="getMaxOrder" parameterType="Integer" resultType="Integer">
+		SELECT MAX(`order`) as maxOrder
+		FROM page_list
+		WHERE 1=1
+		AND `form_seq` = #{form_seq}		
+	</select>
+	
+	<delete id="clearComponentLink" parameterType="Integer">
+		DELETE FROM component_location_link
+		WHERE page_seq = #{page_seq}
+	</delete>
+	
+	<insert id="addComponentLink" parameterType="com.lafin.abmaker.dto.ComponentLocationLinkDto" >
+		INSERT INTO `component_location_link` 
+		( 
+			`comp_seq`, 
+			`page_seq`, 
+			`comp_order`, 
+			`regist_date`
+		)
+		VALUES
+		( 
+			#{comp_seq}, 
+			#{page_seq}, 
+			#{comp_order}, 
+			NOW()
+		)			
+	</insert>
     
 </mapper>

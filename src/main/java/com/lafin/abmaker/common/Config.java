@@ -25,6 +25,7 @@ public class Config implements WebMvcConfigurer{
 	
 	public static final String DEBUG = "debug";
 	public static final String PRODUCTION = "production";
+	public static final String COOKIE_KEY = "abmaker_2020!@#$";
 	
 	
 	// 로그인 인터셉터 추가

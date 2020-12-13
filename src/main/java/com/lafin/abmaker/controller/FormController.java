@@ -1,6 +1,7 @@
 package com.lafin.abmaker.controller;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,6 +18,7 @@ import com.lafin.abmaker.dto.FormDto;
 import com.lafin.abmaker.form.BoardForm;
 import com.lafin.abmaker.service.FormService;
 import com.lafin.abmaker.util.JsUtil;
+import com.lafin.abmaker.util.StringUtil;
 
 @Controller
 @RequestMapping(value = "/form/*")
@@ -94,12 +96,12 @@ public class FormController extends BaseController{
 		super.init(model);
 		
 		param.setUser_seq(userInfo.getUser_seq());
-		boolean result = formService.deleteForm(param);
+		Map result = formService.deleteForm(param);
 		
-		if(result) {
+		if(Integer.parseInt(result.get("code").toString()) == 200) {
 			return JsUtil.openAlert("양식이 삭제되었습니다.", "reload", JsUtil.PARENT);
 		}else {
-			return JsUtil.openAlert("일시적인 오류입니다. 다시 시도해 주세요.", "reload", JsUtil.PARENT);
+			return JsUtil.openAlert(StringUtil.str(result.get("msg"), "양식 수정이 실패하였습니다."), "reload", JsUtil.PARENT);
 		}
 	}
 

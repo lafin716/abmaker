@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.lafin.abmaker.mapper.ComponentListMapper">
+
+	<select id="getTotal" parameterType="Integer" resultType="Integer">
+        SELECT count(*) as cnt 
+        FROM component_list
+        WHERE user_seq = #{user_seq}
+        AND asset_seq = #{asset_seq}
+    </select>
+    
+    <select id="getComponentListAll" parameterType="Integer" resultType="com.lafin.abmaker.dto.ComponentDto">
+        SELECT * 
+        FROM component_list
+        WHERE user_seq = #{user_seq}
+        ORDER BY comp_name ASC
+    </select>
+        
+    <select id="getComponentList" parameterType="com.lafin.abmaker.form.BoardForm" resultType="com.lafin.abmaker.dto.ComponentDto">
+        SELECT p.*, a.asset_name 
+        FROM component_list as p
+        INNER JOIN asset_list as a
+        ON p.asset_seq = a.asset_seq
+        WHERE 1=1
+        AND p.user_seq = #{user_seq}
+        AND p.asset_seq = #{asset_seq}
+        ORDER BY p.comp_name ASC
+        LIMIT #{paging.startRow}, #{paging.rowSize}
+    </select>
+    
+    <select id="getComponentLinkList" parameterType="Integer" resultType="com.lafin.abmaker.dto.ComponentLocationLinkDto">
+        SELECT cll.*, cl.comp_name, cl.type, cl.asset_seq
+        FROM component_location_link as cll
+        LEFT JOIN component_list as cl
+        ON cll.comp_seq = cl.comp_seq
+        WHERE 1=1
+        AND cll.page_seq = #{page_seq}
+        ORDER BY cll.comp_order ASC
+    </select>
+    
+    <select id="getComponentById" parameterType="Integer" resultType="com.lafin.abmaker.dto.ComponentDto">
+        SELECT a.*, f.asset_name 
+        FROM component_list as a
+        LEFT JOIN asset_list as f
+        ON a.asset_seq = f.asset_seq
+        WHERE 1=1
+        AND a.comp_seq = #{comp_seq}
+    </select>
+    
+    <select id="getComponent" parameterType="com.lafin.abmaker.dto.ComponentDto" resultType="com.lafin.abmaker.dto.ComponentDto">
+        SELECT a.*, f.asset_name 
+        FROM component_list as a
+        LEFT JOIN asset_list as f
+        ON a.asset_seq = f.asset_seq
+        WHERE 1=1
+        AND a.user_seq = #{user_seq}
+        AND a.comp_seq = #{comp_seq}
+    </select>
+    
+    <insert id="addComponent" parameterType="com.lafin.abmaker.dto.ComponentDto">
+    	INSERT INTO component_list
+    	( 
+    	`user_seq`,
+		`asset_seq`, 
+		`comp_name`, 
+		`type`, 
+		`comp_content`, 
+		`regist_date`
+		)
+    	VALUES
+    	(
+    	#{user_seq},
+    	#{asset_seq}, 
+    	#{comp_name}, 
+    	#{type}, 
+    	#{comp_content}, 
+    	NOW()
+    	);
+    </insert>
+    
+    <update id="modifyComponent" parameterType="com.lafin.abmaker.dto.ComponentDto">
+    	UPDATE component_list
+    	SET  
+			`comp_name` = #{comp_name},
+			`asset_seq` = #{asset_seq},
+			`type` = #{type},  
+			`comp_content` = #{comp_content}
+    	WHERE 1=1
+    	AND `comp_seq` = #{comp_seq}
+    </update>
+    
+    <delete id="deleteComponent" parameterType="com.lafin.abmaker.dto.ComponentDto">
+    	DELETE FROM component_list
+    	WHERE 1=1
+    	AND `user_seq` = #{user_seq}
+    	AND `comp_seq` IN 
+    	<foreach collection="comp_seq_list" item="code" index="index" separator="," open="(" close=")">
+	        #{code}
+	    </foreach>
+	</delete>
+	
+    
+</mapper>

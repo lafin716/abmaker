@@ -44,6 +44,19 @@ public class JsUtil {
 		return js(buffer.toString());
 	}
 	
+	public static String alert(String msg, String url, String _target) {
+		
+		if(_target == null || _target.trim().equals("")){
+			_target = JsUtil.SELF;
+		}
+		
+		StringBuffer buffer = new StringBuffer();
+		buffer.append(_target + ".alert('" + msg + "');");
+		buffer.append(_target + ".location.href  = '" + url + "';");
+		
+		return js(buffer.toString());
+	}
+	
 	public static String redirect(String url) {
 		
 		StringBuffer buffer = new StringBuffer();
@@ -131,7 +144,7 @@ public class JsUtil {
 	}
 	
 	private static String checkKeyword(String callback) {
-		List keywordList = new ArrayList(Arrays.asList("submit", "reload", "submit"));
+		List keywordList = new ArrayList(Arrays.asList("submit", "reload", "link", "back"));
 		String result = "";
 		
 		if(result == null) {

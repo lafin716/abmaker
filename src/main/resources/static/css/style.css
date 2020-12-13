@@ -6980,5 +6980,8 @@ Media Query
 @media only screen and (max-width:320px) {}
 
 .hide { display: none; }
+.desc { color: #aeaeae; font-weight: normal; }
+.table-responsive { overflow-x: hidden; } 
 
+.component-control i { font-size: 14pt; margin: 0 3px; }
 

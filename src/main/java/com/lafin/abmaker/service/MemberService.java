@@ -11,4 +11,5 @@ public interface MemberService {
 	public Map findID(UserDto param);
 	public Map findPW(UserDto param);
 	public Map checkDuplicateByEmail(String user_email);
+	public UserDto getMemberInfo(String user_email);
 }

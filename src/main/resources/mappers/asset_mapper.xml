@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.lafin.abmaker.mapper.AssetListMapper">
+
+	<select id="getTotal" parameterType="Integer" resultType="Integer">
+        SELECT count(*) as cnt 
+        FROM asset_list
+        WHERE user_seq = #{user_seq}
+    </select>
+    
+    <select id="getAssetListAll" parameterType="Integer" resultType="com.lafin.abmaker.dto.AssetDto">
+        SELECT * 
+        FROM asset_list
+        WHERE user_seq = #{user_seq}
+        ORDER BY asset_name ASC
+    </select>
+        
+    <select id="getAssetList" parameterType="com.lafin.abmaker.form.BoardForm" resultType="com.lafin.abmaker.dto.AssetDto">
+        SELECT a.*, f.form_title 
+        FROM asset_list as a
+        LEFT JOIN form_list as f
+        ON a.link_seq = f.form_seq
+        WHERE 1=1
+        AND a.asset_type = 'form'
+        AND a.user_seq = #{user_seq}
+        <if test="link_seq != null and link_seq > 0">
+        AMD a.link_seq = #{link_seq}
+        </if>
+        ORDER BY a.asset_name ASC
+        LIMIT #{paging.startRow}, #{paging.rowSize}
+    </select>
+    
+    <select id="getAsset" parameterType="com.lafin.abmaker.dto.AssetDto" resultType="com.lafin.abmaker.dto.AssetDto">
+        SELECT a.*, f.form_title 
+        FROM asset_list as a
+        LEFT JOIN form_list as f
+        ON a.link_seq = f.form_seq
+        WHERE 1=1
+        AND a.asset_type = 'form'
+        AND a.user_seq = #{user_seq}
+        AND a.asset_seq = #{asset_seq}
+    </select>
+    
+    <select id="getAssetById" parameterType="Integer" resultType="com.lafin.abmaker.dto.AssetDto">
+        SELECT a.*, f.form_title 
+        FROM asset_list as a
+        LEFT JOIN form_list as f
+        ON a.link_seq = f.form_seq
+        WHERE 1=1
+        AND a.asset_type = 'form'
+        AND a.asset_seq = #{asset_seq}
+    </select>
+    
+    <insert id="addAsset" parameterType="com.lafin.abmaker.dto.AssetDto">
+    	INSERT INTO asset_list
+    	( 
+		`user_seq`, 
+		`asset_name`, 
+		`amount`, 
+		`asset_type`, 
+		`link_seq`, 
+		`memo`, 
+		`regist_date`
+		)
+    	VALUES
+    	(#{user_seq}, #{asset_name}, #{amount}, #{asset_type}, #{link_seq}, #{memo}, NOW());
+    </insert>
+    
+    <update id="modifyAsset" parameterType="com.lafin.abmaker.dto.AssetDto">
+    	UPDATE asset_list
+    	SET  
+			`asset_name` = #{asset_name}, 
+			`amount` = #{amount},  
+			`memo` = #{memo}
+    	WHERE 1=1
+    	AND `user_seq` = #{user_seq}
+    	AND `asset_seq` = #{asset_seq}
+    </update>
+    
+    <delete id="deleteAsset" parameterType="com.lafin.abmaker.dto.AssetDto">
+    	DELETE FROM asset_list
+    	WHERE 1=1
+    	AND `user_seq` = #{user_seq}
+    	AND `asset_seq` IN 
+    	<foreach collection="asset_seq_list" item="code" index="index" separator="," open="(" close=")">
+	        #{code}
+	    </foreach>
+	</delete>
+	
+	<update id="calculate" parameterType="com.lafin.abmaker.dto.AssetDto">
+		UPDATE asset_list
+		SET amount = #{amount}
+		WHERE 1=1
+		AND asset_seq = #{asset_seq}
+		AND user_seq = #{user_seq}
+	</update>
+	
+	<insert id="addLog" parameterType="com.lafin.abmaker.dto.AssetLogDto">
+		INSERT INTO `accountbook_maker`.`asset_log_list` 
+		( 
+			`comp_seq`, 
+			`asset_seq`, 
+			`asset_name`, 
+			`comp_name`, 
+			`type`, 
+			`amount`, 
+			`memo`, 
+			`regist_date`
+		)
+		VALUES
+		( 
+			#{comp_seq}, 
+			#{asset_seq}, 
+			#{asset_name}, 
+			#{comp_name}, 
+			#{type}, 
+			#{amount}, 
+			#{memo}, 
+			NOW()
+		);
+	</insert>
+    
+</mapper>

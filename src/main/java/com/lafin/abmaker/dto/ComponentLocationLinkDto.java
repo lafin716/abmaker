@@ -1,42 +1,17 @@
 package com.lafin.abmaker.dto;
 
+import java.util.Date;
+
+import lombok.Data;
+
+@Data
 public class ComponentLocationLinkDto {
-	private int compSetSeq;
-	private int compSeq;
-	private int pageSeq;
-	private String compOrder;
-	private String registDate;
-	
-	public int getCompSetSeq() {
-		return compSetSeq;
-	}
-	public void setCompSetSeq(int compSetSeq) {
-		this.compSetSeq = compSetSeq;
-	}
-	public int getCompSeq() {
-		return compSeq;
-	}
-	public void setCompSeq(int compSeq) {
-		this.compSeq = compSeq;
-	}
-	public int getPageSeq() {
-		return pageSeq;
-	}
-	public void setPageSeq(int pageSeq) {
-		this.pageSeq = pageSeq;
-	}
-	public String getCompOrder() {
-		return compOrder;
-	}
-	public void setCompOrder(String compOrder) {
-		this.compOrder = compOrder;
-	}
-	public String getRegistDate() {
-		return registDate;
-	}
-	public void setRegistDate(String registDate) {
-		this.registDate = registDate;
-	}
-	
-	
+	private Integer comp_set_seq;
+	private Integer comp_seq;
+	private String comp_name;
+	private Integer asset_seq;
+	private String type;
+	private Integer page_seq;
+	private Integer comp_order;
+	private Date regist_date;
 }

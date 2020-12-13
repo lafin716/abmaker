@@ -1,5 +1,6 @@
 package com.lafin.abmaker.interceptor;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -11,7 +12,9 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.lafin.abmaker.common.Config;
 import com.lafin.abmaker.dto.UserDto;
+import com.lafin.abmaker.util.TokenUtil;
 
 @Component
 public class LoginInterceptor implements HandlerInterceptor{
@@ -26,7 +29,7 @@ public class LoginInterceptor implements HandlerInterceptor{
 		HttpSession session = request.getSession();
 		UserDto userInfo = (UserDto) session.getAttribute("userInfo");
 		
-		if(ObjectUtils.isEmpty(userInfo)) {			
+		if(ObjectUtils.isEmpty(userInfo)) {
 			logger.info( request.getRequestURL().toString() + " :: " + request.getQueryString() + " :: " + request.getHeader("referer") + " :: " + request.getMethod());
 			response.sendRedirect("/member/login");
 			result = false;

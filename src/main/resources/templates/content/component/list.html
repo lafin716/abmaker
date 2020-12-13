@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/data_table}">
+    
+    <script layout:fragment="script">
+	function deleteComponent(){
+		if($('.comp_seq:checked').length > 0){
+			openDialog('컴포넌트삭제', '정말 삭제하시겠습니까? 삭제 후 복구가 불가능합니다.', function(){ $('#delForm').submit(); }, null);	
+		}else{
+			openAlert('삭제할 컴포넌트를 선택해주세요.', null);
+		}
+			
+	}
+	</script>
+	
+    <div class="container-fluid  dashboard-content" layout:fragment="content">
+		<!-- ============================================================== -->
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="page-header">
+                    <h2 class="pageheader-title">컴포넌트관리</h2>                    
+                </div>
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        
+        <div class="row">
+        	<!-- ============================================================== -->
+            <!-- 컴포넌트 목록  -->
+            <!-- ============================================================== -->
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                        	<div class="row">
+                        		<div class="col-sm-8">
+                        			<div class="dt-buttons">
+		                        		<a href="/component/add" class="btn btn-sm btn-outline-light buttons-add buttons-html5"><span>추가</span></a> 
+			                        	<button class="btn btn-sm btn-outline-light buttons-del buttons-html5" tabindex="0" type="button" onclick="deleteComponent();"><span>삭제</span></button>
+		                        	</div> 
+                        		</div>
+                        		<div class="col-sm-4">
+                        			<form id="searchForm" method="get" action="/component/list">
+	                        			<div class="input-group">
+	                                        <select class="form-control" name="asset_seq" required="required">
+								            	<th:block th:each="assetData : ${assetList}" th:with="searchSeq=${#strings.defaultString(param.asset_seq, '0')}">
+								                <option th:text="${assetData.asset_name}" th:value="${assetData.asset_seq}" th:attr="selected=${assetData.asset_seq} == ${searchSeq} ? 'true' : 'false'"></option>
+								                </th:block>
+								            </select>
+	                                        <div class="input-group-append">
+	                                            <button type="submit" class="btn btn-sm btn-outline-light buttons-html5">검색</button>
+	                                        </div>
+	                                    </div>
+						            </form>
+                        		</div>
+                        	</div>
+                        	<div class="row">
+                        		<div class="col-sm-12">
+                        			<form id="delForm" method="post" action="/component/delete" target="actionFrame">
+		                            <table class="table table-striped table-bordered dataTable" style="width:100%">
+		                            	<colgroup>
+		                            		<col width="5%">		                            		
+		                            		<col width="20%">
+		                            		<col width="*%">
+		                            		<col width="15%">
+		                            		<col width="15%">
+		                            		<col width="7%">
+		                            	</colgroup>
+		                                <thead>
+		                                    <tr>
+		                                    	<th>
+		                                    		<label class="custom-control custom-checkbox">
+		                                                <input type="checkbox" class="custom-control-input chkAll" data-target="comp_seq"><span class="custom-control-label"></span>
+		                                            </label>
+                                            	</th>
+		                                        <th>자산명</th>
+		                                        <th>컴포넌트명</th>
+		                                        <th>타입</th>
+		                                        <th>등록날짜</th>
+		                                        <th>수정</th>
+		                                    </tr>
+		                                </thead>
+		                                <tbody>
+		                                	<tr th:if="${#lists.size(componentList) == 0}">
+												<td colspan="6">등록된 자산이 없습니다.</td>
+											</tr>
+										    <tr th:unless="${#lists.size(componentList) == 0}" th:each="component : ${componentList}">
+										    	<td>
+										    		<label class="custom-control custom-checkbox">
+		                                                <input type="checkbox" class="custom-control-input comp_seq" name="comp_seq_list" th:value="${component.comp_seq}"><span class="custom-control-label"></span>
+		                                            </label>
+		                                		<td th:text="${component.asset_name}"></td>
+		                                		<td th:text="${component.comp_name}"></td>		                                		
+		                                		<td th:text="${component.type}"></td>		                                		
+		                                		<td th:text="${#dates.format(component.regist_date, 'yyyy-MM-dd HH:mm:ss')}" ></td> 
+		                                		<td><a th:href="@{/component/view?comp_seq={no} (no = ${component.comp_seq})}" class="btn btn-primary">수정</a></td> 
+		                                	</tr>
+		                                </tbody>
+		                            </table>
+		                            </form>
+	                            </div>
+                            </div>
+                            <div class="row">
+                            	<div class="col-sm-12">
+	                            	<ul class="pagination">
+	                            	
+	                            	<th:block th:if="${paging.totalPage} > 0">
+	                            		<li class="paginate_button page-item"><a class="page-link" th:href="@{/form/list?page={page} (page = ${paging.prevPage})}">이전</a></li>
+	                            	  <th:block th:with="start = ${paging.startPage}, end = ${paging.endPage}" th:each="pageButton : ${#numbers.sequence(paging.startPage, paging.endPage)}">
+									    <li class="paginate_button page-item" th:classappend="${paging.currentPage == pageButton} ? active"><a class="page-link" th:href="@{/form/list?page={page} (page = ${pageButton})}" th:text=${pageButton}></a></li>
+									  </th:block>
+									    <li class="paginate_button page-item"><a class="page-link" th:href="@{/form/list?page={page} (page = ${paging.nextPage})}">다음</a></li>
+									</th:block>
+									</ul>
+								</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ============================================================== -->
+            <!-- 자산 목록  -->
+            <!-- ============================================================== -->
+        </div>
+    </div>
+</html>

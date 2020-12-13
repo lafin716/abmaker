@@ -8,4 +8,5 @@ public abstract class BaseService {
 	// 로거 설정
 	public Logger logger = LoggerFactory.getLogger(this.getClass());
 	
+	
 }

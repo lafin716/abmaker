@@ -11,8 +11,10 @@ import lombok.ToString;
 @Getter @Setter @ToString
 public class BoardForm {
 	private Integer page = 1;
-	private Integer user_seq;
-	private Integer form_seq;
+	private Integer user_seq = 0;
+	private Integer form_seq = 0;
+	private Integer link_seq = 0;
+	private Integer asset_seq = 0;
 	private String keyword = "";
 	private Integer entries = 10;
 	private PagingUtil paging = new PagingUtil();

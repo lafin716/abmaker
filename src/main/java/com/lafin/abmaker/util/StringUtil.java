@@ -1,6 +1,8 @@
 package com.lafin.abmaker.util;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
@@ -40,5 +42,16 @@ public class StringUtil {
 		}
 		
 		return false;
+	}
+	
+	// 치환문자 
+	public static String replace(String code) {
+		String result = "";
+		Map valueList = new HashMap();
+		valueList.put("minus", "지출");
+		valueList.put("plus", "수입"); 
+		valueList.put("view", "보기");
+		
+		return valueList.get(code).toString();		
 	}
 }

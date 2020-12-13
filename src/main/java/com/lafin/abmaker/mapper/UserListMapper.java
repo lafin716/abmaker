@@ -8,5 +8,6 @@ public interface UserListMapper {
 	
 	public UserDto getMember(@Param("user_email") String user_email, @Param("user_pw") String user_pw);
 	public Integer getMemberCountByEmail(@Param("user_email") String user_email);
+	public UserDto getMemberByEmail(@Param("user_email") String user_email);
 	public Integer setMember(UserDto userDto);
 }

@@ -1,5 +1,9 @@
 package com.lafin.abmaker.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -18,6 +22,7 @@ public abstract class BaseController {
 	public HttpServletResponse response;
 	public HttpSession session;
 	public UserDto userInfo;
+	public Map cookie;
 	
 	public BaseController(HttpServletRequest request, HttpServletResponse response) {
 		this.request = request;
@@ -48,5 +53,50 @@ public abstract class BaseController {
 			}
 		}
 		
+		// 쿠키 세팅
+		cookie = getAllCookies();
+		
+	}
+	
+	public Map getAllCookies() {
+		Map result = new HashMap();
+		Cookie[] cookies = request.getCookies();
+
+	    for(int i = 0; i < cookies.length; i++) {
+	    	result.put(cookies[i].getName(), cookies[i].getValue());
+	    }
+	    
+	    return result;
+	}
+	
+	public void setCookie(String cookieName, String cookieValue) {
+		Cookie cookie = new Cookie(cookieName, cookieValue);
+		
+		// 쿠키는 일주일 간 지속
+		cookie.setMaxAge(60 * 60 * 24 * 7);
+		cookie.setPath("/");
+		
+		// 쿠키를 세팅
+		response.addCookie(cookie);
+	}
+	
+	public void deleteCookie(String cookieName) {
+		Cookie cookie = new Cookie(cookieName, null);
+		cookie.setMaxAge(0);
+		cookie.setPath("/");
+		
+		// 쿠키를 세팅
+		response.addCookie(cookie);
+	}
+	
+	public void clearCookies() {
+		Cookie[] cookies = request.getCookies();
+
+	    for(int i = 0; i < cookies.length; i++) {
+	    	Cookie cookie = new Cookie(cookies[i].getName(), null);
+	    	cookie.setMaxAge(0);
+	    	cookie.setPath("/");
+	    	response.addCookie(cookie);
+	    }
 	}
 }

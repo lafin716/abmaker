@@ -4,13 +4,6 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/data_table}">
     
-    <script layout:fragment="script">
-	function addForm(){
-		openLayerForm('양식추가', 'ly_addform', { action: '/form/add', method: 'post', target: 'actionFrame' });
-	}
-	
-	</script>
-
     <div class="container-fluid  dashboard-content" layout:fragment="content">
 		<!-- ============================================================== -->
         <div class="row">
@@ -26,7 +19,7 @@
         	<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
         		<form id="modifyForm" method="post" action="/form/modify" target="actionFrame" data-parsley-validate="">
 	        	<div class="card">
-	                <h5 class="card-header">양식수정</h5>
+	                <h5 class="card-header">양식수정 <span class="desc" th:text="'(' + ${#dates.format(formData.regist_date, 'yyyy-MM-dd HH:mm:ss')} + ')'"></span></h5>
 	                <div class="card-body">
                     	<input type="hidden" name="form_seq" th:value="${formData.form_seq}">
                         <div class="form-group">

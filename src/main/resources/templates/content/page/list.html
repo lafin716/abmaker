@@ -10,10 +10,10 @@
 	}
 	
 	function deletePage(){
-		if($('.form_seq:checked').length > 0){
-			openDialog('양식삭제', '정말 삭제하시겠습니까? 삭제 후 복구가 불가능합니다.', function(){ $('#delForm').submit(); }, null);	
+		if($('.page_seq:checked').length > 0){
+			openDialog('페이지삭제', '정말 삭제하시겠습니까? 삭제 후 복구가 불가능합니다.', function(){ $('#delForm').submit(); }, null);	
 		}else{
-			openAlert('삭제할 양식을 선택해주세요.', null);
+			openAlert('삭제할 페이지를 선택해주세요.', null);
 		}
 			
 	}
@@ -39,57 +39,76 @@
                     <div class="card-body">
                         <div class="table-responsive">
                         	<div class="row">
-                        		<div class="col-sm-12">
+                        		<div class="col-sm-8">
                         			<div class="dt-buttons">
-		                        		<button class="btn btn-outline-light buttons-add buttons-html5" tabindex="0" type="button" onclick="addPage();"><span>추가</span></button> 
-			                        	<button class="btn btn-outline-light buttons-del buttons-html5" tabindex="0" type="button" onclick="deleteForm();"><span>삭제</span></button>
+		                        		<button class="btn btn-sm btn-outline-light buttons-add buttons-html5" tabindex="0" type="button" onclick="addPage();"><span>추가</span></button> 
+			                        	<button class="btn btn-sm btn-outline-light buttons-del buttons-html5" tabindex="0" type="button" onclick="deletePage();"><span>삭제</span></button>
 		                        	</div> 
+                        		</div>
+                        		<div class="col-sm-4">
+                        			<th:block th:if="${#lists.size(formList) > 0}">
+									<form id="searchForm" method="get" action="/page/list">
+	                        			<div class="input-group">
+	                                        <select class="form-control" name="form_seq" required="required">
+								            	<th:block th:each="formData : ${formList}" th:with="searchSeq=${#strings.defaultString(param.form_seq, '0')}">
+								                <option th:text="${formData.form_title}" th:value="${formData.form_seq}" th:attr="selected=${formData.form_seq} == ${searchSeq} ? 'true' : 'false'"></option>
+								                </th:block>
+								            </select>
+	                                        <div class="input-group-append">
+	                                            <button type="submit" class="btn btn-sm btn-outline-light buttons-html5">검색</button>
+	                                        </div>
+	                                    </div>
+	                                    
+							        </form>
+									</th:block>                        			
                         		</div>
                         	</div>
                         	<div class="row">
                         		<div class="col-sm-12">
-                        			<form id="delForm" method="post" action="/form/delete" target="actionFrame">
+                        			<form id="delForm" method="post" action="/page/delete" target="actionFrame">
 		                            <table class="table table-striped table-bordered dataTable" style="width:100%">
 		                            	<colgroup>
 		                            		<col width="5%">
 		                            		<col width="7%">
+		                            		<col width="20%">
 		                            		<col width="*">
-		                            		<col width="15%">
 		                            		<col width="7%">
+		                            		<col width="15%">
+		                            		<col width="17%">
 		                            	</colgroup>
 		                                <thead>
 		                                    <tr>
 		                                    	<th>
 		                                    		<label class="custom-control custom-checkbox">
-		                                                <input type="checkbox" class="custom-control-input chkAll" data-target="form_seq"><span class="custom-control-label"></span>
+		                                                <input type="checkbox" class="custom-control-input chkAll" data-target="page_seq"><span class="custom-control-label"></span>
 		                                            </label>
                                             	</th>
 		                                        <th>번호</th>
 		                                        <th>양식명</th>
+		                                        <th>페이지명</th>
+		                                        <th>순서</th>
 		                                        <th>등록날짜</th>
 		                                        <th>수정</th>
 		                                    </tr>
 		                                </thead>
 		                                <tbody>
-		                                	<tr th:if="${#lists.size(formList) == 0}">
-												<td colspan="5">등록된 양식이 없습니다.</td>
+		                                	<tr th:if="${#lists.size(pageList) == 0}">
+												<td colspan="7">등록된 페이지가 없습니다.</td>
 											</tr>
-										    <tr th:unless="${#lists.size(formList) == 0}" th:each="form : ${formList}">
+										    <tr th:unless="${#lists.size(pageList) == 0}" th:each="page : ${pageList}">
 										    	<td>
 										    		<label class="custom-control custom-checkbox">
-		                                                <input type="checkbox" class="custom-control-input form_seq" name="form_seq_list" th:value="${form.form_seq}"><span class="custom-control-label"></span>
+		                                                <input type="checkbox" class="custom-control-input page_seq" name="page_seq_list" th:value="${page.page_seq}"><span class="custom-control-label"></span>
 		                                            </label>
-		                                		<td th:text="${form.form_seq}"></td> 
-		                                		
-		                                		<th:block th:if="${form.is_main} == 1">
-		                                		<td th:text="[기본] + ${form.form_title}"></td>
-		                                		</th:block> 
-		                                		<th:block th:unless="${form.is_main} == 1">
-		                                		<td th:text="${form.form_title}"></td>
-		                                		</th:block>
-		                                		
-		                                		<td th:text="${form.regist_date}"></td> 
-		                                		<td><a th:href="@{/form/view?form_seq={no} (no = ${form.form_seq})}" class="btn btn-primary">수정</a></td> 
+		                                		<td th:text="${page.page_seq}"></td>		                                		
+		                                		<td th:text="${page.form_title}"></td>
+		                                		<td th:text="${page.page_title}"></td>		                                		
+		                                		<td th:text="${page.order}"></td>		                                		
+		                                		<td th:text="${#dates.format(page.regist_date, 'yyyy-MM-dd HH:mm:ss')}" ></td> 
+		                                		<td>
+		                                			<a th:href="@{/page/view?page_seq={no} (no = ${page.page_seq})}" class="btn btn-sm btn-primary">수정</a>
+		                                			<a th:href="@{/page/decorate?page_seq={no} (no = ${page.page_seq})}" class="btn btn-sm btn-warning">꾸미기</a>
+		                                		</td> 
 		                                	</tr>
 		                                </tbody>
 		                            </table>
@@ -122,13 +141,17 @@
         <div id="ly_addpage" class="hide">
 	        <div class="form-group">
 	            <label class="col-form-label">양식선택</label>	 
-	            <select class="form-control" name="form_seq" th:each="formData : ${formList}">
-	                <option th:text="${formData.form_title}" th:value="${formData.form_seq}" th:attr="selected=${formData.is_main} == 1 ? 'true' : 'false'"></option>                                
-	            </select>           
+	            <th:block th:if="${#lists.size(formList) > 0}">
+	            <select class="form-control" name="form_seq" required="required">
+	            	<th:block th:each="formData : ${formList}" th:with="searchSeq=${#strings.defaultString(param.form_seq, '0')}">
+	                <option th:text="${formData.form_title}" th:value="${formData.form_seq}" th:attr="selected=${formData.form_seq} == ${searchSeq} ? 'true' : 'false'"></option>
+	                </th:block>                                
+	            </select>
+	            </th:block>
 	        </div>
 	        <div class="form-group">
 	            <label class="col-form-label">페이지명</label>
-	            <input type="text" class="form-control" name="page_title" required="" placeholder="페이지명을 입력해주세요.">
+	            <input type="text" class="form-control" name="page_title" required="required" placeholder="페이지명을 입력해주세요.">
 	        </div>	        	        
         </div>
     </div>

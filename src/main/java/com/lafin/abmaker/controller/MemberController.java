@@ -10,16 +10,19 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.lafin.abmaker.common.Config;
 import com.lafin.abmaker.dto.UserDto;
 import com.lafin.abmaker.service.MemberService;
 import com.lafin.abmaker.util.JsUtil;
 import com.lafin.abmaker.util.PagingUtil;
+import com.lafin.abmaker.util.TokenUtil;
 
 @Controller
 @RequestMapping(value="/member/*")
@@ -46,7 +49,7 @@ public class MemberController extends BaseController {
 	}
 	
 	@PostMapping(value="login")
-	public @ResponseBody String login_process(Model model, @RequestParam("user_email") String user_email, @RequestParam("user_pw") String user_pw) throws IOException{
+	public @ResponseBody String login_process(Model model, @RequestParam("user_email") String user_email, @RequestParam("user_pw") String user_pw, @RequestParam(name = "remember_me", required = false, defaultValue = "0") Integer remember_me) throws Exception{
 		super.init(model);
 		
 		if(loginCheck()) return JsUtil.redirect("/", JsUtil.PARENT);
@@ -57,8 +60,12 @@ public class MemberController extends BaseController {
 		Map result = memberService.login(user_email, user_pw);
 		
 		if(Integer.parseInt(result.get("code").toString()) == 200) {
-			HttpSession session = request.getSession();
 			session.setAttribute("userInfo", (UserDto) result.get("userInfo"));
+			
+			// 자동로그인에 체크한 경우 쿠키 생성
+			if(remember_me == 1) {
+				setCookie("userInfo", TokenUtil.encrypt(user_email, Config.COOKIE_KEY));
+			}
 			
 			return JsUtil.redirect("/", JsUtil.PARENT);
 		}else {
@@ -112,6 +119,7 @@ public class MemberController extends BaseController {
 	@GetMapping(value="logout")
 	public String logout() {
 		session.invalidate();
+		deleteCookie("userInfo");
 		return "redirect:/member/login";
 	}
 	
@@ -121,7 +129,26 @@ public class MemberController extends BaseController {
 		if(session.getAttribute("userInfo") != null) {
 			return true;
 		}else {
-			return false;
+			try {
+				// 쿠키체크 추가
+				if(ObjectUtils.isEmpty(cookie.get("userInfo"))) {
+					return false;
+				}
+				
+				logger.info(cookie.get("userInfo").toString());
+				String userEmail = TokenUtil.decrypt(cookie.get("userInfo").toString(), Config.COOKIE_KEY);
+				UserDto tmpUserInfo = memberService.getMemberInfo(userEmail);
+				
+				if(!ObjectUtils.isEmpty(tmpUserInfo)) {
+					session.setAttribute("userInfo", tmpUserInfo);					
+					return true;
+				}else {
+					return false;
+				}
+			}catch (Exception e) {
+				e.printStackTrace();
+				return false;
+			}		 
 		}
 	}
 	

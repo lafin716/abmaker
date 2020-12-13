@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/data_table}">
+      
+    <script layout:fragment="script">
+    $(document).ready(function(){
+    	setCompEvent();
+    	setCompIndex();
+    });
+    
+	function addComponent(){
+		componentWrap = $('#component-template').clone();
+		compVal = $('#comp_seq option:selected').val();
+		compText = $('#comp_seq option:selected').text();
+		
+		
+		$(componentWrap).removeClass('hide');
+		$(componentWrap).removeAttr('id');
+		$(componentWrap).find('.comp_seq_list').val(compVal);
+		$(componentWrap).find('.card-body').text(compText);
+		$(componentWrap).find('.btnCompUp').click(function(){
+			compUp(this);
+		});
+		$(componentWrap).find('.btnCompDown').click(function(){
+			compDown(this);
+		});
+		$(componentWrap).find('.btnCompDelete').click(function(){
+			compDelete(this);
+		});
+		
+		$('#component_area').append(componentWrap);
+		setCompIndex();
+	}
+	
+	function setCompEvent(){
+		compList = $('#component_area').find('.component-card');
+		
+		$(compList).each(function(index){
+			
+			$(this).find('.btnCompUp').click(function(){
+				compUp(this);
+			});
+			$(this).find('.btnCompDown').click(function(){
+				compDown(this);
+			});
+			$(this).find('.btnCompDelete').click(function(){
+				compDelete(this);
+			});
+		});
+	}
+	
+	function setCompIndex(){
+		compList = $('#component_area').find('.component-card');
+		
+		$(compList).each(function(index){
+			$(this).attr('component-index', index);
+		});
+	}
+	
+	function compUp(obj){
+		currentCard = $(obj).closest('.component-card');
+		currentIndex = $(currentCard).attr('component-index');
+		
+		if(currentIndex > 0){
+			prevObj = $(currentCard).prev();
+			newAfterObj = $(prevObj).clone();
+			$(currentCard).after(newAfterObj);
+			prevObj.remove();
+		}
+		
+		setCompIndex();
+	}
+	
+	function compDown(obj){
+		currentCard = $(obj).closest('.component-card');
+		currentIndex = $(currentCard).attr('component-index');
+		compCount = $('#component_area').find('.component-card').length;
+		
+		if(currentIndex < (compCount - 1) ){
+			nextObj = $(currentCard).next();
+			newNextObj = $(nextObj).clone();
+			$(currentCard).before(newNextObj);
+			nextObj.remove();
+		}
+		
+		setCompIndex();
+	}
+		
+	function compDelete(obj){
+		currentCard = $(obj).closest('.component-card');
+		$(currentCard).remove();
+		
+		setCompIndex();
+	}
+	</script>
+    
+    <div class="container-fluid  dashboard-content" layout:fragment="content">
+		<!-- ============================================================== -->
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="page-header">
+                    <h2 class="pageheader-title">페이지관리</h2>
+                </div>
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        
+        <div class="row">
+        	<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+	        	<div class="card">
+	                <h5 class="card-header">컴포넌트 목록</h5>
+	                <div class="card-body">
+                    	<th:block th:if="${#lists.size(componentList) > 0}">
+                    	<div class="input-group mb-3">
+			            	<select class="form-control" id="comp_seq" name="comp_seq" required="required">
+				            	<th:block th:each="componentData : ${componentList}">
+				                <option th:text="${componentData.comp_name}" th:value="${componentData.comp_seq}"></option>
+				                </th:block>                                
+				            </select>
+				            <button type="button" class="btn btn-sm btn-success" onclick="addComponent();">추가</button>
+			            </div>
+			            </th:block>
+                    </div>
+	            </div>
+            </div>
+        </div>
+        
+        <div class="row">
+        	<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+        		<form id="modifyForm" method="post" action="/page/decorate" target="actionFrame" data-parsley-validate="">
+        		<input type="hidden" name="page_seq" th:value="${pageData.page_seq}">
+	        	<div class="card">
+	                <h5 class="card-header">[<span th:text="${pageData.page_title}"></span>] <button type="submit" class="btn btn-sm btn-success">저장</button></h5>
+	                
+	                
+	                <div id="component_area" class="card-body bg-dark">
+	                
+	                <th:block th:if="${#lists.size(componentLinkList) > 0}" th:each="compLink : ${componentLinkList}">
+	                   	<div class="card component-card" component-index="">
+				        	<input type="hidden" class="comp_seq_list" name="comp_seq_list" th:value="${compLink.comp_seq}">        	
+				            <div class="card-header component-control">
+				            	<a href="javascript:;" class="btnCompUp"><i class="icon-arrow-up-circle text-primary"></i></a>
+				            	<a href="javascript:;" class="btnCompDown"><i class="icon-arrow-down-circle text-primary"></i></a>
+				            	<a href="javascript:;" class="btnCompDelete"><i class="icon-close text-danger"></i></a>
+				            </div>
+				            <div class="card-body" th:text="${compLink.comp_name}"></div>
+				        </div>
+		            </th:block>
+		            
+	                </div>
+	                
+	            </div>
+	            </form>
+            </div>
+        </div>
+        
+        <div id="component-template" class="card hide component-card" component-index="">
+        	<input type="hidden" class="comp_seq_list" name="comp_seq_list" value="">        	
+            <div class="card-header component-control">
+            	<a href="javascript:;" class="btnCompUp"><i class="icon-arrow-up-circle text-primary"></i></a>
+            	<a href="javascript:;" class="btnCompDown"><i class="icon-arrow-down-circle text-primary"></i></a>
+            	<a href="javascript:;" class="btnCompDelete"><i class="icon-close text-danger"></i></a>
+            </div>
+            <div class="card-body">
+            </div>
+        </div>
+    </div>
+</html>

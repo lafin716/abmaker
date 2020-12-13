@@ -4,19 +4,12 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/data_table}">
     
-    <script layout:fragment="script">
-	function addForm(){
-		openLayerForm('양식추가', 'ly_addform', { action: '/form/add', method: 'post', target: 'actionFrame' });
-	}
-	
-	</script>
-
     <div class="container-fluid  dashboard-content" layout:fragment="content">
 		<!-- ============================================================== -->
         <div class="row">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                 <div class="page-header">
-                    <h2 class="pageheader-title">양식관리</h2>                    
+                    <h2 class="pageheader-title">페이지관리</h2>                    
                 </div>
             </div>
         </div>
@@ -24,26 +17,33 @@
         
         <div class="row">
         	<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-        		<form id="modifyForm" method="post" action="/form/modify" target="actionFrame" data-parsley-validate="">
+        		<form id="modifyForm" method="post" action="/page/modify" target="actionFrame" data-parsley-validate="">
 	        	<div class="card">
-	                <h5 class="card-header">양식수정</h5>
+	                <h5 class="card-header">페이지수정</h5>
 	                <div class="card-body">
-                    	<input type="hidden" name="form_seq" th:value="${formData.form_seq}">
+                    	<input type="hidden" name="page_seq" th:value="${pageData.page_seq}">
                         <div class="form-group">
-                            <label for="formTitle" class="col-form-label">양식명</label>
-                            <input id="formTitle" type="text" class="form-control" name="form_title" th:value="${formData.form_title}" required="required" >
+                            <label for="pageTitle" class="col-form-label">페이지명</label>
+                            <input id="pageTitle" type="text" class="form-control" name="page_title" th:value="${pageData.page_title}" required="required" >
                         </div>
                         <div class="form-group">
-                            <label for="isMain" class="col-form-label">기본 양식 여부</label>
-                            <select class="form-control" id="isMain" name="is_main">
-                                <option value="1" th:attr="selected=${formData.is_main} == 1 ? 'true' : 'false'">예</option>
-                                <option value="0" th:attr="selected=${formData.is_main} == 0 ? 'true' : 'false'">아니오</option>                                
-                            </select>
+                            <label class="col-form-label">연결된 양식</label>
+                            <th:block th:if="${#lists.size(formList) > 0}">
+				            <select class="form-control" name="form_seq" required="required">
+				            	<th:block th:each="formData : ${formList}">
+				                <option th:text="${formData.form_title}" th:value="${formData.form_seq}" th:attr="selected=${formData.form_seq} == ${pageData.form_seq} ? 'true' : 'false'"></option>
+				                </th:block>                                
+				            </select>
+				            </th:block>
+                        </div>
+                        <div class="form-group">
+                        	<label for="pageOrder" class="col-form-label">순서</label>
+                            <input id="pageOrder" type="number" class="form-control" name="order" th:value="${pageData.order}" required="required" >
                         </div>
 	                </div>
 	                <div class="card-footer">
 	                	<button type="submit" class="btn btn-primary">저장</button>
-	                	<a href="/form/list" class="btn btn-secondary">취소</a>
+	                	<a href="/page/list" class="btn btn-secondary">취소</a>
 	                </div>
 	            </div>
 	            </form>

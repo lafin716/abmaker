@@ -88,7 +88,7 @@
 		                                		<td th:text="${form.form_title}"></td>
 		                                		</th:block>
 		                                		
-		                                		<td th:text="${form.regist_date}"></td> 
+		                                		<td th:text="${#dates.format(form.regist_date, 'yyyy-MM-dd HH:mm:ss')}"></td> 
 		                                		<td><a th:href="@{/form/view?form_seq={no} (no = ${form.form_seq})}" class="btn btn-primary">수정</a></td> 
 		                                	</tr>
 		                                </tbody>

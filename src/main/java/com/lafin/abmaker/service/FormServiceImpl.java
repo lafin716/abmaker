@@ -1,6 +1,8 @@
 package com.lafin.abmaker.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,7 +45,12 @@ public class FormServiceImpl extends BaseService implements FormService{
 	public FormDto getForm(FormDto param) {
 		return formListMapper.getForm(param);
 	}
-
+	
+	@Override
+	public FormDto getMainForm(Integer user_seq) {
+		return formListMapper.getMainForm(user_seq);
+	}
+	
 	@Override
 	public boolean setMainForm(FormDto param) {
 		return formListMapper.setMainForm(param);
@@ -66,8 +73,31 @@ public class FormServiceImpl extends BaseService implements FormService{
 	}
 
 	@Override
-	public boolean deleteForm(FormDto param) {
-		return formListMapper.deleteForm(param);
+	public Map deleteForm(FormDto param) {
+		Map result = new HashMap();
+		Integer code = 400;
+		String msg = "";
+		
+		// 기본 양식이 포함되어있는지 확인 기본양식은 최소 1개 이상이여야하므로 삭제 불가
+		Integer mainFormCount = formListMapper.countMainForm(param);
+		
+		if(mainFormCount > 0) {
+			msg = "기본 양식은 삭제할 수 없습니다.";
+			code = 401;
+		}else {
+			if(formListMapper.deleteForm(param)) {
+				msg = "삭제완료";
+				code = 200;
+			}else {
+				msg = "삭제가 실패했습니다. 다시 시도해 주세요.";
+				code = 500;
+			}
+		}
+		
+		result.put("code", code);
+		result.put("msg", msg);
+		
+		return result;
 	}
 
 	@Override

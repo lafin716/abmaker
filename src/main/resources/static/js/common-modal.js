@@ -23,6 +23,8 @@ function openLayer(title, layerId, onConfirm, onClose){
 		resultCallback = null;
 		if(onConfirm === 'reload'){
 			resultCallback = function(){ location.reload(); };
+		}else if(onConfirm == 'back'){
+			resultCallback = function(){ history.back(-1); };
 		}else{
 			resultCallback = onConfirm;
 		}
@@ -35,6 +37,8 @@ function openLayer(title, layerId, onConfirm, onClose){
 		resultCallback = null;
 		if(onClose === 'reload'){
 			resultCallback = function(){ location.reload(); };
+		}else if(onClose == 'back'){
+			resultCallback = function(){ history.back(-1); };
 		}else{
 			resultCallback = onClose;
 		}
@@ -81,6 +85,8 @@ function openDialog(title, msg, onConfirm, onClose){
 			resultCallback = function(){ layerObj.submit(); };
 		}else if(onConfirm === 'reload'){
 			resultCallback = function(){ location.reload(); };
+		}else if(onConfirm == 'back'){
+			resultCallback = function(){ history.back(-1); };
 		}else{
 			resultCallback = onConfirm;
 		}
@@ -93,6 +99,8 @@ function openDialog(title, msg, onConfirm, onClose){
 		resultCallback = null;
 		if(onClose === 'reload'){
 			resultCallback = function(){ location.reload(); };
+		}else if(onClose == 'back'){
+			resultCallback = function(){ history.back(-1); };
 		}else{
 			resultCallback = onClose;
 		}
@@ -114,6 +122,8 @@ function openAlert(msg, onClose){
 		resultCallback = null;
 		if(onClose === 'reload'){
 			resultCallback = function(){ location.reload(); };
+		}else if(onClose == 'back'){
+			resultCallback = function(){ history.back(-1); };
 		}else{
 			resultCallback = onClose;
 		}
